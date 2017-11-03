@@ -4,7 +4,7 @@ use Illuminate\Support\Facades\Schema;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Database\Migrations\Migration;
 
-class CreateCommoditiesTable extends Migration
+class CreateAdvertsTable extends Migration
 {
     /**
      * Run the migrations.
@@ -13,10 +13,12 @@ class CreateCommoditiesTable extends Migration
      */
     public function up()
     {
-        Schema::create('commodities', function (Blueprint $table) {
+        Schema::create('adverts', function (Blueprint $table) {
             $table->increments('id');
-            $table->string('feature');
-            $table->unsignedInteger('stock')->default(0);
+            $table->string('thumb_url');
+            $table->string('url');
+            $table->unsignedInteger('param')->default(0);
+            $table->tinyInteger('type');
             $table->timestamps();
         });
     }
@@ -28,6 +30,6 @@ class CreateCommoditiesTable extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('commodities');
+        Schema::dropIfExists('adverts');
     }
 }
