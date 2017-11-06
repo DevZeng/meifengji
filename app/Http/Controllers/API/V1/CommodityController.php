@@ -54,7 +54,7 @@ class CommodityController extends Controller
         $standards = $info->standards()->get();
         if (!empty($standards)){
             for ($i=0;$i<count($standards);$i++){
-                $standards->attrs = $standards->attr()->get();
+                $standards[$i]->attrs = $standards[$i]->attr()->get();
             }
         }
         $info->standards = $standards;
