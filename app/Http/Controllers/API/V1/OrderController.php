@@ -70,4 +70,26 @@ class OrderController extends Controller
             ]);
         }
     }
+    public function confirm($id)
+    {
+        $uid = getUserToken(Input::get('token'));
+        $order = Order::find($id);
+        if (empty($order)){
+            return response()->json([
+                'code'=>'400',
+                'msg'=>'订单不存在！'
+            ]);
+        }
+        if ($order->user_id != $uid){
+            return response()->json([
+                'code'=>'403',
+                'msg'=>'无权操作！'
+            ]);
+        }
+        $order->state = 3;
+        $order->save();
+        return response()->json([
+            'code'=>'200'
+        ]);
+    }
 }
