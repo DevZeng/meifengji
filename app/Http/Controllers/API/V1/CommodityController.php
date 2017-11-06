@@ -82,10 +82,6 @@ class CommodityController extends Controller
         $feature = json_decode($feature);
         sort($feature);
         $feature = implode(',',$feature);
-        return response()->json([
-            'code'=>'400',
-            'msg'=>$feature
-        ]);
         $commodity = Commodity::where('feature','=',$feature)->first();
         return response()->json([
             'code'=>'200',
