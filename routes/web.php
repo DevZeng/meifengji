@@ -16,5 +16,5 @@ Route::get('/', function () {
 });
 Route::post('login','API\V1\UserController@adminLogin');
 Route::group(['middleware'=>'auth'],function (){
-   Route::post();
+//   Route::post();
 });
