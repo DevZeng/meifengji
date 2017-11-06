@@ -70,6 +70,8 @@ class OrderController extends Controller
         $order->number = $number;
         $order->user_id = $uid;
         $order->address = Input::get('address');
+        $order->name = Input::get('name');
+        $order->phone = Input::get('phone');
         $order->description = Input::get('description');
         if ($order->save()){
             for ($i=0;$i<count($products);$i++){

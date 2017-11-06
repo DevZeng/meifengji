@@ -17,6 +17,7 @@ class CreateStandardsTable extends Migration
             $table->increments('id');
             $table->unsignedInteger('commodity_id');
             $table->string('title');
+            $table->tinyInteger('state')->default(1);
             $table->timestamps();
         });
     }

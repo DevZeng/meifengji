@@ -18,6 +18,7 @@ class CreateCommoditiesTable extends Migration
             $table->unsignedInteger('commodity_id');
             $table->string('feature');
             $table->unsignedInteger('stock')->default(0);
+            $table->tinyInteger('state')->default(1);
             $table->timestamps();
         });
     }
