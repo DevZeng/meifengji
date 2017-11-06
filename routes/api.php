@@ -23,4 +23,5 @@ Route::group(['prefix'=>'v1'],function (){
     Route::get('commodities','API\V1\CommodityController@getCommodityInfos');
     Route::get('commodity/{id}','API\V1\CommodityController@getCommodityInfo');
     Route::get('product','API\V1\CommodityController@getCommodity');
+    Route::post('order','API\V1\OrderController@makeOrder');
 });
