@@ -12,11 +12,11 @@ use Illuminate\Support\Facades\Input;
 class CommodityController extends Controller
 {
     //
-    public function getCommodityInfos()
+    public function getCommodityInfos(Request $request)
     {
-        $page = Input::get('page',1);
-        $limit = Input::get('limit',10);
-        $title = Input::get('title');
+        $page = $request->get('page',1);
+        $limit = $request->get('limit',10);
+        $title = $request->get('title');
         if (!empty($title)){
             echo 'title';
             $commodities = CommodityInfo::where('title','like','%'.$title.'%')->get();
