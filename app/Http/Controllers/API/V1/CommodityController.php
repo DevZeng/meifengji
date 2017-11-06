@@ -16,7 +16,12 @@ class CommodityController extends Controller
     {
         $page = Input::get('page',1);
         $limit = Input::get('limit',10);
-        $commodities = CommodityInfo::where('state','=',1)->limit($limit)->offset(($page-1)*$limit)->get();
+        $title = Input::get('title');
+        if (!empty($title)){
+            $commodities = CommodityInfo::where('title','like','%'.$title.'%')->get();
+        }else{
+            $commodities = CommodityInfo::where('state','=',1)->limit($limit)->offset(($page-1)*$limit)->get();
+        }
         if (!empty($commodities)){
             for ($i=0;$i<count($commodities);$i++){
                 $commodities[$i]->price = $commodities[$i]->commodities()->orderBy('price','asc')->pluck('price')->first();
