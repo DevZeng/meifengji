@@ -31,6 +31,23 @@ class OrderController extends Controller
             ]);
         }
     }
+    public function getReserves()
+    {
+        $page = Input::get('page',1);
+        $limit = Input::get('limit',10);
+        $state = Input::get('state');
+        if (!empty($state)){
+            $reserves = DeliveryAddress::where([
+                'state'=>$state
+            ])->limit($limit)->offset(($page-1)*$limit)->get();
+        }else{
+            $reserves = DeliveryAddress::limit($limit)->offset(($page-1)*$limit)->get();
+        }
+        return response()->json([
+            'code'=>'200',
+            'data'=>$reserves
+        ]);
+    }
     public function makeOrder()
     {
         $uid = getUserToken(Input::get('token'));
