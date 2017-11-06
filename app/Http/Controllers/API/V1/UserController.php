@@ -5,6 +5,7 @@ namespace App\Http\Controllers\API\V1;
 use App\Libraries\Wxxcx;
 use App\Models\Attribute;
 use App\Models\Commodity;
+use App\Models\CommodityInfo;
 use App\Models\DeliveryAddress;
 use App\Models\Order;
 use App\Models\OrderSnapshot;
@@ -110,8 +111,9 @@ class UserController extends Controller
             return [];
         }
         for ($i=0;$i<$length;$i++){
-            $commodity = Commodity::find($snapshots[$i]->commodity_id);
-            $snapshots[$i]->picture = $commodity->pictures()->pluck('thumb_url')->first();
+            $info = CommodityInfo::find($snapshots[$i]->commodity_id);
+            $snapshots[$i]->picture = $info->pictures()->pluck('thumb_url')->first();
+            $commodity = Commodity::find($snapshots[$i]->product_id);
             $feature2 = $commodity->feature;
             $feature2 = explode(',',$feature2);
             $attrs = Attribute::whereIn('id',$feature2)->pluck('title');
