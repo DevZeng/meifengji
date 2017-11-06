@@ -23,7 +23,10 @@ Route::group(['middleware'=>'cross'],function (){
    Route::get('infos','API\V1\CommodityController@listCommodityInfos');
    Route::get('del/info/{id}','API\V1\CommodityController@delCommodityInfo');
    Route::post('standard','API\V1\CommodityController@addStandard');
-   Route::get('standards','API\V1\CommodityController@getStandards');
+   Route::get('standards/{id}','API\V1\CommodityController@getStandards');
    Route::get('del/standard/{id}','API\V1\CommodityController@delStandard');
+   Route::get('product','API\V1\CommodityController@addProduct');
+   Route::get('products','API\V1\CommodityController@getProducts');
+   Route::get('del/product/{id}','API\V1\CommodityController@delProduct');
     });
 });

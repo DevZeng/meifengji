@@ -179,4 +179,56 @@ class CommodityController extends Controller
             'data'=>$commodity
         ]);
     }
+    public function addProduct()
+    {
+        $id = Input::get('id');
+        $feature = Input::get('feature');
+        $feature = implode(',',$feature);
+        if (!empty($id)){
+            $commodity = new Commodity();
+            $commodity->feature = $feature;
+            $commodity->price = Input::get('price');
+            $commodity->stock = Input::get('stock');
+            $commodity->commodity_id = Input::get('commodity_id');
+        }else{
+            $commodity = Commodity::find($id);
+            $commodity->feature = $feature;
+            $commodity->price = Input::get('price');
+            $commodity->stock = Input::get('stock');
+        }
+        if ($commodity->save()){
+            return response()->json([
+                'code'=>'200'
+            ]);
+        }
+    }
+    public function delProduct($id)
+    {
+        $commodity = Commodity::find($id);
+        $commodity->state = 0;
+        if ($commodity->save()){
+            return response()->json([
+                'code'=>'200'
+            ]);
+        }
+    }
+    public function getProducts($id)
+    {
+        $commodities = Commodity::where([
+            'commodity_id'=>$id,
+            'state'=>1
+        ])->get();
+        if (!empty($commodities)){
+            for ($i=0;$i<count($commodities);$i++){
+                $feature = $commodities[$i]->feature;
+                $feature = explode(',',$feature);
+                $featureText = Attribute::whereIn('id',$feature)->pluck('title');
+                $commodities[$i]->attrs = $featureText;
+            }
+        }
+        return response()->json([
+            'code'=>'200',
+            'data'=>$commodities
+        ]);
+    }
 }
