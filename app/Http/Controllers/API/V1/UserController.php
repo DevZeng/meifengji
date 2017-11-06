@@ -3,12 +3,15 @@
 namespace App\Http\Controllers\API\V1;
 
 use App\Libraries\Wxxcx;
+use App\Models\Attribute;
+use App\Models\Commodity;
 use App\Models\DeliveryAddress;
 use App\Models\Order;
 use App\Models\OrderSnapshot;
 use App\Models\WeChatUser;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Input;
 
 class UserController extends Controller
@@ -107,7 +110,27 @@ class UserController extends Controller
             return [];
         }
         for ($i=0;$i<$length;$i++){
-
+            $commodity = Commodity::find($snapshots[$i]->commodity_id);
+            $snapshots[$i]->picture = $commodity->pictures()->pluck('thumb_url')->first();
+            $feature2 = $commodity->feature;
+            $feature2 = explode(',',$feature2);
+            $attrs = Attribute::whereIn('id',$feature2)->pluck('title');
+            $snapshots[$i]->attrs = $attrs;
+        }
+    }
+    public function adminLogin()
+    {
+        $username = Input::get('username');
+        $password = Input::get('password');
+        if (Auth::attempt(['username'=>$username,'password'=>$password],true)){
+            return response()->json([
+                'code'=>'200'
+            ]);
+        }else{
+            return response()->json([
+                'code'=>'500',
+                'msg'=>'用户名或密码错误！'
+            ]);
         }
     }
 }

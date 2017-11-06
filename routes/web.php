@@ -14,3 +14,7 @@
 Route::get('/', function () {
     return view('welcome');
 });
+Route::post('login','API\V1\UserController@adminLogin');
+Route::group(['middleware'=>'auth'],function (){
+   Route::post();
+});
