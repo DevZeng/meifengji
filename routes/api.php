@@ -16,4 +16,5 @@ use Illuminate\Http\Request;
 Route::group(['prefix'=>'v1'],function (){
     Route::post('login','API\V1\UserController@login');
     Route::post('reserve','API\V1\OrderController@reserve');
+    Route::get('adverts','API\V1\SystemController@getAdverts');
 });

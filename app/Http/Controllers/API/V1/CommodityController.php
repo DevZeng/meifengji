@@ -30,4 +30,8 @@ class CommodityController extends Controller
     {
 
     }
+    public function getStandards()
+    {
+
+    }
 }
