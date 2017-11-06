@@ -47,6 +47,8 @@ class OrderController extends Controller
         $order = new Order();
         $order->number = $number;
         $order->user_id = $uid;
+        $order->address = Input::get('address');
+        $order->description = Input::get('description');
         if ($order->save()){
             for ($i=0;$i<count($products);$i++){
                 $commodity = Commodity::find($products[$i]['id']);
