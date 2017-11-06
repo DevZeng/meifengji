@@ -86,11 +86,51 @@ class CommodityController extends Controller
 
     public function addStandard()
     {
-
+        $title = Input::get('title');
+        $cid = Input::get('commodity_id');
+        $standard = new Standard();
+        $standard->title = $title;
+        $standard->commodity_id = $cid;
+        if ($standard->save()){
+            $attrs = Input::get('attrs');
+            if (!empty($attrs)){
+                foreach ($attrs as $attr){
+                    $attribute = new Attribute();
+                    $attribute->title = $attr;
+                    $attribute->standard_id = $standard->id;
+                    $attribute->save();
+                }
+            }
+            return response()->json([
+                'code'=>'200'
+            ]);
+        }
     }
-    public function getStandards()
+    public function getStandards($id)
     {
-        $standards = Standard::all();
+        $standards = Standard::where([
+            'commodity_id'=>$id,
+            'state'=>1
+        ])->get();
+        if (!empty($standards)){
+            for ($i=0;$i<count($standards);$i++){
+                $standards[$i]->attrs = $standards[$i]->attr()->where('state','=',1)->pluck('title');
+            }
+        }
+        return response()->json([
+            'code'=>'200',
+            'data'=>$standards
+        ]);
+    }
+    public function delStandard($id)
+    {
+        $standard = Standard::find($id);
+        $standard->state = 0;
+        if ($standard->save()){
+            return response()->json([
+                'code'=>'200'
+            ]);
+        }
     }
     public function getCommodityInfo($id)
     {

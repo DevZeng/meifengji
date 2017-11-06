@@ -22,5 +22,8 @@ Route::group(['middleware'=>'cross'],function (){
    Route::post('info','API\V1\CommodityController@addCommodityInfo');
    Route::get('infos','API\V1\CommodityController@listCommodityInfos');
    Route::get('del/info/{id}','API\V1\CommodityController@delCommodityInfo');
+   Route::post('standard','API\V1\CommodityController@addStandard');
+   Route::get('standards','API\V1\CommodityController@getStandards');
+   Route::get('del/standard/{id}','API\V1\CommodityController@delStandard');
     });
 });

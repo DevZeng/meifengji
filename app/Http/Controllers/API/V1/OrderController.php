@@ -40,11 +40,16 @@ class OrderController extends Controller
             $reserves = DeliveryAddress::where([
                 'state'=>$state
             ])->limit($limit)->offset(($page-1)*$limit)->get();
+            $count = DeliveryAddress::where([
+                'state'=>$state
+            ])->limit($limit)->offset(($page-1)*$limit)->count();
         }else{
             $reserves = DeliveryAddress::limit($limit)->offset(($page-1)*$limit)->get();
+            $count = DeliveryAddress::limit($limit)->offset(($page-1)*$limit)->count();
         }
         return response()->json([
             'code'=>'200',
+            'count'=>$count,
             'data'=>$reserves
         ]);
     }
