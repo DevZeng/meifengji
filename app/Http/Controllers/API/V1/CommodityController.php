@@ -41,4 +41,26 @@ class CommodityController extends Controller
     {
         $standards = Standard::all();
     }
+    public function getCommodityInfo($id)
+    {
+        $info = CommodityInfo::find($id);
+        if (empty($info)){
+            return response()->json([
+                'code'=>'404',
+                'msg'=>'未找到该商品！'
+            ]);
+        }
+        $info->price = $info->commodities()->orderBy('price','ASC')->pluck('price')->first();
+        $standards = $info->standards()->get();
+        if (!empty($standards)){
+            for ($i=0;$i<count($standards);$i++){
+                $standards->attrs = $standards->attr()->get();
+            }
+        }
+        $info->standards = $standards;
+        return response()->json([
+            'code'=>'200',
+            'data'=>$info
+        ]);
+    }
 }

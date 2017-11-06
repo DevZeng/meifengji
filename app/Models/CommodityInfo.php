@@ -11,4 +11,9 @@ class CommodityInfo extends Model
     {
         return $this->hasMany('App\Models\Commodity','commodity_id','id');
     }
+
+    public function standards()
+    {
+        return $this->hasMany('App\Models\Standard','commodity_id','id');
+    }
 }
