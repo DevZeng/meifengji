@@ -113,6 +113,7 @@ class UserController extends Controller
         for ($i=0;$i<$length;$i++){
             $info = CommodityInfo::find($snapshots[$i]->commodity_id);
             $snapshots[$i]->picture = $info->pictures()->pluck('thumb_url')->first();
+            $snapshots[$i]->commodity_name = $info->title;
             $commodity = Commodity::find($snapshots[$i]->product_id);
             $feature2 = $commodity->feature;
             $feature2 = explode(',',$feature2);
