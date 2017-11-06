@@ -18,6 +18,8 @@ class CreateCommodityInfosTable extends Migration
             $table->string('title');
             $table->string('description',1000);
             $table->text('content');
+            $table->unsignedInteger('sales')->default(0);
+//            $table->float('price');
             $table->timestamps();
         });
     }

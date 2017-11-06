@@ -15,6 +15,7 @@ class CreateCommoditiesTable extends Migration
     {
         Schema::create('commodities', function (Blueprint $table) {
             $table->increments('id');
+            $table->unsignedInteger('commodity_id');
             $table->string('feature');
             $table->unsignedInteger('stock')->default(0);
             $table->timestamps();
