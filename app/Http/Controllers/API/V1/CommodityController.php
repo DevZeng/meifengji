@@ -14,6 +14,8 @@ class CommodityController extends Controller
     //
     public function getCommodityInfos(Request $request)
     {
+        $data = $request->all();
+        dd($data);
         $page = $request->input('page',1);
         $limit = $request->input('limit',10);
         $title = $request->input('title');
