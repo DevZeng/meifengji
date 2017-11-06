@@ -14,16 +14,12 @@ class CommodityController extends Controller
     //
     public function getCommodityInfos(Request $request)
     {
-        $data = $request->all();
-        dd($data);
         $page = $request->input('page',1);
         $limit = $request->input('limit',10);
         $title = $request->input('title');
         if (!empty($title)){
-            echo 'title';
             $commodities = CommodityInfo::where('title','like','%'.$title.'%')->get();
         }else{
-            echo 'no title';
             $commodities = CommodityInfo::where('state','=',1)->limit($limit)->offset(($page-1)*$limit)->get();
         }
         if (!empty($commodities)){
