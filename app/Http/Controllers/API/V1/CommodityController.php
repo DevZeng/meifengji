@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers\API\V1;
 
+use App\Models\Attribute;
 use App\Models\Commodity;
 use App\Models\CommodityInfo;
 use App\Models\Standard;
@@ -83,6 +84,12 @@ class CommodityController extends Controller
         sort($feature);
         $feature = implode(',',$feature);
         $commodity = Commodity::where('feature','=',$feature)->first();
+        if (!empty($commodity)){
+            $feature2 = $commodity->feature;
+            $feature2 = explode(',',$feature2);
+            $attrs = Attribute::whereIn('id',$feature2)->pluck('title');
+            $commodity->attrs = $attrs;
+        }
         return response()->json([
             'code'=>'200',
             'data'=>$commodity
