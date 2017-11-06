@@ -80,6 +80,7 @@ class CommodityController extends Controller
             ]);
         }
         $feature = json_decode($feature);
+        $feature = sort($feature);
         $feature = implode(',',$feature);
         return response()->json([
             'code'=>'400',
