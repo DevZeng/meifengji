@@ -18,8 +18,10 @@ class CommodityController extends Controller
         $limit = Input::get('limit',10);
         $title = Input::get('title');
         if (!empty($title)){
+            echo 'title';
             $commodities = CommodityInfo::where('title','like','%'.$title.'%')->get();
         }else{
+            echo 'no title';
             $commodities = CommodityInfo::where('state','=',1)->limit($limit)->offset(($page-1)*$limit)->get();
         }
         if (!empty($commodities)){
