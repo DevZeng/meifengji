@@ -31,3 +31,10 @@ if (!function_exists('getUserToken')) {
         return $uid;
     }
 }
+if (!function_exists('formatUrl')) {
+    function formatUrl($url)
+    {
+//        return env('APP_URL').$url;
+        return 'http://119.23.255.177:8091/uploads/'.$url;
+    }
+}

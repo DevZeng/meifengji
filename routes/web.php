@@ -16,6 +16,7 @@ Route::get('/', function () {
 });
 Route::group(['middleware'=>'cross'],function (){
     Route::post('login','API\V1\UserController@adminLogin');
+    Route::post('upload','API\V1\SystemController@uploadImage');
     Route::group(['middleware'=>'auth'],function (){
 //   Route::post();
    Route::get('reserves','API\V1\OrderController@getReserves');
@@ -31,5 +32,8 @@ Route::group(['middleware'=>'cross'],function (){
    Route::get('orders','API\V1\OrderController@getOrders');
    Route::post('delivery/order/{id}','API\V1\OrderController@deliveryOrder');
    Route::get('order/{id}','API\V1\OrderController@getOrder');
+   Route::get('adverts','API\V1\SystemController@getAdverts');
+   Route::post('advert','API\V1\SystemController@addAdvert');
+
     });
 });
