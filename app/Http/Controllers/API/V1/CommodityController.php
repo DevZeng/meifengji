@@ -65,11 +65,14 @@ class CommodityController extends Controller
         $title = $request->input('title');
         if (!empty($title)){
             $commodities = CommodityInfo::where('title','like','%'.$title.'%')->where('state','=',1)->get();
+            $count = CommodityInfo::where('title','like','%'.$title.'%')->where('state','=',1)->count();
         }else{
             $commodities = CommodityInfo::where('state','=',1)->limit($limit)->offset(($page-1)*$limit)->get();
+            $count = CommodityInfo::where('state','=',1)->limit($limit)->offset(($page-1)*$limit)->count();
         }
         return response()->json([
             'code'=>'200',
+            'count'=>$count,
             'data'=>$commodities
         ]);
     }
