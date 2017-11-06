@@ -25,7 +25,7 @@ class UserController extends Controller
                 $user->city = $userinfo->city;
                 $user->province = $userinfo->province;
                 $user->avatarUrl = $userinfo->avatarUrl;
-                $user->wechatId = $userinfo->openId;
+                $user->open_id = $userinfo->openId;
                 if ($user->save()){
                     $token = createNoncestr(16);
                     setUserToken($token,$user->id);
