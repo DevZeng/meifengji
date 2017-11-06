@@ -19,5 +19,8 @@ Route::group(['middleware'=>'cross'],function (){
     Route::group(['middleware'=>'auth'],function (){
 //   Route::post();
    Route::get('reserves','API\V1\OrderController@getReserves');
+   Route::post('info','API\V1\CommodityController@addCommodityInfo');
+   Route::get('infos','API\V1\CommodityController@listCommodityInfos');
+   Route::get('del/info/{id}','API\V1\CommodityController@delCommodityInfo');
     });
 });

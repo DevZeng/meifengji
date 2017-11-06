@@ -37,7 +37,51 @@ class CommodityController extends Controller
 
     public function addCommodityInfo()
     {
-
+        $id = Input::get('id');
+        if (empty($id)){
+            $info = new CommodityInfo();
+        }else{
+            $info = CommodityInfo::find($id);
+            if (empty($info)){
+                return response()->json([
+                    'code'=>'404',
+                    'msg'=>'未找到！'
+                ]);
+            }
+        }
+        $info->title = Input::get('title');
+        $info->description = Input::get('description');
+        $info->content = Input::get('content');
+        if ($info->save()){
+            return response()->json([
+                'code'=>'200'
+            ]);
+        }
+    }
+    public function listCommodityInfos(Request $request)
+    {
+        $page = $request->input('page',1);
+        $limit = $request->input('limit',10);
+        $title = $request->input('title');
+        if (!empty($title)){
+            $commodities = CommodityInfo::where('title','like','%'.$title.'%')->where('state','=',1)->get();
+        }else{
+            $commodities = CommodityInfo::where('state','=',1)->limit($limit)->offset(($page-1)*$limit)->get();
+        }
+        return response()->json([
+            'code'=>'200',
+            'data'=>$commodities
+        ]);
+    }
+    public function delCommodityInfo($id)
+    {
+        $commodity = CommodityInfo::find($id);
+        $commodity->state = 0;
+        if ($commodity->save()){
+            return response()->json([
+                'code'=>'200'
+            ]);
+        }
     }
 
     public function addStandard()
