@@ -70,4 +70,19 @@ class CommodityController extends Controller
             'data'=>$info
         ]);
     }
+    public function getCommodity()
+    {
+        $feature = Input::get('feature');
+        if (empty($feature)){
+            return response()->json([
+                'code'=>'400',
+                'msg'=>'参数错误！'
+            ]);
+        }
+        $commodity = Commodity::where('feature','=',$feature)->first();
+        return response()->json([
+            'code'=>'200',
+            'data'=>$commodity
+        ]);
+    }
 }

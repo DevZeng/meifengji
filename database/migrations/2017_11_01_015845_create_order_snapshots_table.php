@@ -15,6 +15,11 @@ class CreateOrderSnapshotsTable extends Migration
     {
         Schema::create('order_snapshots', function (Blueprint $table) {
             $table->increments('id');
+            $table->string('number');
+            $table->unsignedInteger('commodity_id');
+            $table->unsignedInteger('product_id');
+            $table->float('price');
+            $table->unsignedInteger('count');
             $table->timestamps();
         });
     }

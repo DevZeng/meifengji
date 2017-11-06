@@ -3,9 +3,11 @@
 namespace App\Http\Controllers\API\V1;
 
 use App\Libraries\Wxxcx;
+use App\Models\DeliveryAddress;
 use App\Models\WeChatUser;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
+use Illuminate\Support\Facades\Input;
 
 class UserController extends Controller
 {
@@ -51,6 +53,21 @@ class UserController extends Controller
             'code'=>'400',
             'msg'=>'error',
             'data'=>$wxxcx
+        ]);
+    }
+    public function getReserves()
+    {
+        $uid = getUserToken(Input::get('token'));
+        $state = Input::get('state',1);
+        $page = Input::get('page',1);
+        $limit = Input::get('limit',10);
+        $reserves = DeliveryAddress::where([
+            'user_id'=>$uid,
+            'state'=>$state
+        ])->limit($limit)->offset(($page-1)*$limit)->get();
+        return response()->json([
+            'code'=>'200',
+            'data'=>$reserves
         ]);
     }
 }
