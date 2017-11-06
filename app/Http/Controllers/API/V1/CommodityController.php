@@ -14,9 +14,9 @@ class CommodityController extends Controller
     //
     public function getCommodityInfos(Request $request)
     {
-        $page = $request->get('page',1);
-        $limit = $request->get('limit',10);
-        $title = $request->get('title');
+        $page = $request->input('page',1);
+        $limit = $request->input('limit',10);
+        $title = $request->input('title');
         if (!empty($title)){
             echo 'title';
             $commodities = CommodityInfo::where('title','like','%'.$title.'%')->get();
