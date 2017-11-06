@@ -18,5 +18,6 @@ Route::group(['middleware'=>'cross'],function (){
     Route::post('login','API\V1\UserController@adminLogin');
     Route::group(['middleware'=>'auth'],function (){
 //   Route::post();
+   Route::get('reserves','API\V1\OrderController@getReserves');
     });
 });
