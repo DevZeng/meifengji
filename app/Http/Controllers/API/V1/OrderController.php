@@ -5,6 +5,7 @@ namespace App\Http\Controllers\API\V1;
 use App\Libraries\WxPay;
 use App\Models\Commodity;
 use App\Models\DeliveryAddress;
+use App\Models\Express;
 use App\Models\Order;
 use App\Models\OrderSnapshot;
 use App\Models\WeChatUser;
@@ -115,5 +116,80 @@ class OrderController extends Controller
         return response()->json([
             'code'=>'200'
         ]);
+    }
+    public function getOrders()
+    {
+        $state = Input::get('state');
+        $number = Input::get('number');
+        $limit = Input::get('limit',10);
+        $page = Input::get('page',1);
+        if (!empty($number)){
+            $order = Order::where('number','=',$number)->get();
+            $count = Order::where('number','=',$number)->count();
+        }else{
+            if (!empty($state)){
+                $order = Order::where('state','=',$state)->limit($limit)->offset(($page-1)*$limit)->get();
+                $count = Order::where('state','=',$state)->limit($limit)->offset(($page-1)*$limit)->count();
+            }else{
+                $order = Order::where('state','!=','0')->limit($limit)->offset(($page-1)*$limit)->get();
+                $count = Order::where('state','!=','0')->limit($limit)->offset(($page-1)*$limit)->count();
+            }
+        }
+        return response()->json([
+            'code'=>'200',
+            'count'=>$count,
+            'data'=>$order
+        ]);
+    }
+    public function getOrder($id)
+    {
+        $order = Order::find($id);
+        $snapshots = OrderSnapshot::where('number','=',$order->number)->get();
+        $this->formatSnapshots($snapshots);
+        $order->snapshots = $snapshots;
+        return response()->json([
+            'code'=>'200',
+            'data'=>$order
+        ]);
+    }
+
+    public function formatSnapshots($snapshots)
+    {
+        $length = count($snapshots);
+        if ($length==0){
+            return [];
+        }
+        for ($i=0;$i<$length;$i++){
+            $info = CommodityInfo::find($snapshots[$i]->commodity_id);
+            $snapshots[$i]->picture = $info->pictures()->pluck('thumb_url')->first();
+            $snapshots[$i]->commodity_name = $info->title;
+            $commodity = Commodity::find($snapshots[$i]->product_id);
+            $feature2 = $commodity->feature;
+            $feature2 = explode(',',$feature2);
+            $attrs = Attribute::whereIn('id',$feature2)->pluck('title');
+            $snapshots[$i]->attrs = $attrs;
+        }
+    }
+    public function deliveryOrder($id)
+    {
+        $order = Order::find($id);
+        if ($order->state != 1){
+            return response()->json([
+                'code'=>'400',
+                'msg'=>'非可操作状态！'
+            ]);
+        }else{
+            $order->state = 1;
+            if ($order->save()){
+                $express = new Express();
+                $express->number = $order->number;
+                $express->name = Input::get('name');
+                $express->track_number = Input::get('track_number');
+                $express->save();
+                return response()->json([
+                    'code'=>'200'
+                ]);
+            }
+        }
     }
 }
