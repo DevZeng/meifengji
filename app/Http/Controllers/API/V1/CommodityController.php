@@ -25,6 +25,7 @@ class CommodityController extends Controller
         if (!empty($commodities)){
             for ($i=0;$i<count($commodities);$i++){
                 $commodities[$i]->price = $commodities[$i]->commodities()->orderBy('price','asc')->pluck('price')->first();
+                $commodities[$i]->picture = $commodities[$i]->pictures()->pluck('thumb_url')->first();
             }
         }
         return response()->json([
@@ -49,6 +50,7 @@ class CommodityController extends Controller
     public function getCommodityInfo($id)
     {
         $info = CommodityInfo::find($id);
+        $info->pictures = $info->pictures()->pluck('thumb_url');
         if (empty($info)){
             return response()->json([
                 'code'=>'404',

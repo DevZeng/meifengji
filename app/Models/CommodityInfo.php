@@ -16,4 +16,8 @@ class CommodityInfo extends Model
     {
         return $this->hasMany('App\Models\Standard','commodity_id','id');
     }
+    public function pictures()
+    {
+        return $this->hasMany('App\Models\CommodityPicture','commodity_id','id');
+    }
 }
