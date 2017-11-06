@@ -4,6 +4,8 @@ namespace App\Http\Controllers\API\V1;
 
 use App\Libraries\Wxxcx;
 use App\Models\DeliveryAddress;
+use App\Models\Order;
+use App\Models\OrderSnapshot;
 use App\Models\WeChatUser;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
@@ -69,5 +71,43 @@ class UserController extends Controller
             'code'=>'200',
             'data'=>$reserves
         ]);
+    }
+    public function getOrders()
+    {
+        $uid = getUserToken(Input::get('token'));
+        $state = Input::get('state',1);
+        $page = Input::get('page',1);
+        $limit = Input::get('limit',10);
+        $orders = Order::where([
+            'user_id'=>$uid,
+            'state'=>$state
+        ])->limit($limit)->offset(($page-1)*$limit)->get();
+        $this->formatOrder($orders);
+        return response()->json([
+            'code'=>'200',
+            'data'=>$orders
+        ]);
+    }
+    public function formatOrder(&$orders)
+    {
+        $length = count($orders);
+        if ($length==0){
+            return [];
+        }
+        for ($i=0;$i<$length;$i++){
+            $snapshots = OrderSnapshot::where('number','=',$orders[$i]->number)->get();
+            $this->formatSnapshots($snapshots);
+            $orders[$i]->snapshots = $snapshots;
+        }
+    }
+    public function formatSnapshots($snapshots)
+    {
+        $length = count($snapshots);
+        if ($length==0){
+            return [];
+        }
+        for ($i=0;$i<$length;$i++){
+
+        }
     }
 }

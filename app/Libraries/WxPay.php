@@ -27,13 +27,13 @@ class WxPay
         $this->key = $key;
     }
 
-    public function pay($out_trade_no,$body,$total_fee,$ip)
+    public function pay($out_trade_no,$body,$total_fee)
     {
-        $return = $this->weixinapp($out_trade_no,$body,$total_fee,$ip);
+        $return = $this->weixinapp($out_trade_no,$body,$total_fee);
         return $return;
     }
 
-    private function unifiedOrder($out_trade_no,$body,$total_fee,$ip)
+    private function unifiedOrder($out_trade_no,$body,$total_fee)
     {
         $url = 'https://api.mch.weixin.qq.com/pay/unifiedorder';
         $parameters = [
@@ -43,13 +43,13 @@ class WxPay
             'body' => $body,
             'out_trade_no' => $out_trade_no,
             'total_fee' => $total_fee,
-            'notify_url' => config('wxxcx.notify_url'),
-            'trade_type' => 'APP',
-            'spbill_create_ip' =>$ip
+            'notify_url' => 'http://119.23.202.220/api/v1/pay/notify',
+            'openid' => $this->openid,
+            'trade_type' => 'JSAPI'
+//            'spbill_create_ip' =>
         ];
         $parameters['sign'] = $this->getSign($parameters);
         $xmlData = $this->arrayToXml($parameters);
-//        dd($xmlData);
         $unifiedOrder = $this->xmlToArray($this->postXmlCurl($xmlData, $url, 60));
         return $unifiedOrder;
     }
@@ -115,19 +115,18 @@ class WxPay
         return $val;
     }
 
-    private function weixinapp($out_trade_no,$body,$total_fee,$ip)
+    private function weixinapp($out_trade_no,$body,$total_fee)
     {
-        $unifiedOrder = $this->unifiedOrder($out_trade_no,$body,$total_fee,$ip);
+        $unifiedOrder = $this->unifiedOrder($out_trade_no,$body,$total_fee);
         $this->prepay_id = $unifiedOrder['prepay_id'];
         $parameters = [
-            'appid' => $this->appid,
-            'partnerid'=>config('wxxcx.mch_id'),
-            'prepayid'=>$unifiedOrder['prepay_id'],
-            'package'=>'Sign=WXPay',
-            'noncestr'=>$this->createNoncestr(),
-            'timeStamp' => ''. time() . ''
+            'appId' => $this->appid,
+            'timeStamp' => ''. time() . '',
+            'nonceStr' => $this->createNoncestr(),
+            'package' => 'prepay_id=' . $unifiedOrder['prepay_id'],
+            'signType' => 'MD5'
         ];
-        $parameters['sign'] = $this->getSign($parameters);
+        $parameters['paySign'] = $this->getSign($parameters);
         return $parameters;
     }
 

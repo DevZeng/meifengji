@@ -79,6 +79,11 @@ class CommodityController extends Controller
                 'msg'=>'参数错误！'
             ]);
         }
+        $feature = implode(',',$feature);
+        return response()->json([
+            'code'=>'400',
+            'msg'=>$feature
+        ]);
         $commodity = Commodity::where('feature','=',$feature)->first();
         return response()->json([
             'code'=>'200',
