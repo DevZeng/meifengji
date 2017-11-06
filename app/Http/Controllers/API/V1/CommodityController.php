@@ -19,7 +19,7 @@ class CommodityController extends Controller
         $commodities = CommodityInfo::where('state','=',1)->limit($limit)->offset(($page-1)*$limit)->get();
         if (!empty($commodities)){
             for ($i=0;$i<count($commodities);$i++){
-                $commodities[$i]->price = $commodities[$i]->commodities()->pluck('price')->orderBy('price','asc')->first();
+                $commodities[$i]->price = $commodities[$i]->commodities()->orderBy('price','asc')->pluck('price')->first();
             }
         }
         return response()->json([
