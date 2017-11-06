@@ -79,7 +79,7 @@ class CommodityController extends Controller
                 'msg'=>'参数错误！'
             ]);
         }
-        $feature = implode(',',$feature);
+        $feature = json_decode($feature);
         return response()->json([
             'code'=>'400',
             'msg'=>$feature
