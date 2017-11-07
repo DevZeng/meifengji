@@ -200,14 +200,7 @@ class OrderController extends Controller
     public function AcceptReserve($id)
     {
         $uid = getUserToken(Input::get('token'));
-        $reserve = Reserve::find($id);
-        if ($reserve->user_id !=$uid){
-            return response()->json([
-                'code'=>'403',
-                'msg'=>'无权操作！'
-            ]);
-        }
-        $order = DeliveryAddress::find($reserve->reserve_id);
+        $order = DeliveryAddress::find($id);
         if ($order->worker!=0){
             return response()->json([
                 'code'=>'403',
@@ -216,7 +209,10 @@ class OrderController extends Controller
         }else{
             $order->worker = $uid;
             if ($order->save()){
-                $reserve->delete();
+                Reserve::where([
+                    'user_id'=>$uid,
+                    'reserve_id'=>$id
+                ])->delete();
                 return response()->json([
                     'code'=>'200'
                 ]);
