@@ -16,6 +16,7 @@ class CreateCommodityPicturesTable extends Migration
         Schema::create('commodity_pictures', function (Blueprint $table) {
             $table->increments('id');
             $table->unsignedInteger('commodity_id');
+            $table->unsignedInteger('product_id');
             $table->string('url');
             $table->string('thumb_url');
             $table->timestamps();

@@ -5,6 +5,7 @@ namespace App\Http\Controllers\API\V1;
 use App\Models\Attribute;
 use App\Models\Commodity;
 use App\Models\CommodityInfo;
+use App\Models\CommodityPicture;
 use App\Models\Standard;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
@@ -248,5 +249,38 @@ class CommodityController extends Controller
             'code'=>'200',
             'data'=>$commodities
         ]);
+    }
+    public function addPicture()
+    {
+        $commodity_id = Input::get('commodity_id');
+        $commodity = Commodity::find($commodity_id);
+        $picture = new CommodityPicture();
+        $picture->product_id = $commodity->id;
+        $picture->commodity_id = $commodity->commodity_id;
+        $picture->url = Input::get('base_url');
+        $picture->thumb_url = Input::get('thumb_url');
+        if ($picture->save()){
+            return response()->json([
+                'code'=>'200'
+            ]);
+        }
+    }
+    public function getPictures($id)
+    {
+        $commodity = Commodity::find($id);
+        $pictures = $commodity->pictures()->get();
+        return response()->json([
+            'code'=>'200',
+            'data'=>$pictures
+        ]);
+    }
+    public function delPicture($id)
+    {
+        $picture = CommodityPicture::find($id);
+        if ($picture->delete()){
+            return response()->json([
+                'code'=>'200'
+            ]);
+        }
     }
 }
