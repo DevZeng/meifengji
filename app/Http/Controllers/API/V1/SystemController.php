@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\API\V1;
 
 use App\Models\Advert;
+use App\Models\Article;
 use Intervention\Image\Facades\Image;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
@@ -91,5 +92,14 @@ class SystemController extends Controller
                 ]
             ]);
         }
+    }
+    public function getArticle()
+    {
+        $type = Input::get('type');
+        $article = Article::where('type','=',$type)->first();
+        return response()->json([
+            'code'=>'200',
+            'data'=>$article
+        ]);
     }
 }
