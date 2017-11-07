@@ -202,6 +202,10 @@ class OrderController extends Controller
         $uid = getUserToken(Input::get('token'));
         $order = DeliveryAddress::find($id);
         if ($order->worker_id!=0){
+            Reserve::where([
+                'user_id'=>$uid,
+                'reserve_id'=>$id
+            ])->delete();
             return response()->json([
                 'code'=>'403',
                 'msg'=>'已被接单！'
