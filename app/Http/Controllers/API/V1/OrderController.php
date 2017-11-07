@@ -26,8 +26,9 @@ class OrderController extends Controller
         $address->name = Input::get('name');
         $address->number = Input::get('number');
         $address->address = Input::get('address');
-        $address->latitude = Input::get('latitude');
-        $address->longitude = Input::get('longitude');
+//        $address->latitude = Input::get('latitude');
+//        $address->longitude = Input::get('longitude');
+        $address->city = Input::get('city');
         if ($address->save()){
             return response()->json([
                 'code'=>'200'

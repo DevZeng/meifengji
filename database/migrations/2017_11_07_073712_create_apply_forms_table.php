@@ -23,6 +23,7 @@ class CreateApplyFormsTable extends Migration
             $table->string('id_card',200);
             $table->float('lat',10,6);
             $table->float('lng',10,6);
+            $table->string('city');
             $table->timestamps();
         });
     }

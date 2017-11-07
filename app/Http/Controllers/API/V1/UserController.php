@@ -147,8 +147,9 @@ class UserController extends Controller
         $address = Input::get('address');
         $name = Input::get('name');
         $id_card = Input::get('id_card');
-        $lat = Input::get('lat');
-        $lng = Input::get('lng');
+        $city = Input::get('city');
+//        $lat = Input::get('lat');
+//        $lng = Input::get('lng');
         $count = ApplyForm::where('phone','=',$phone)->orWhere('id_card','=',$id_card)->count();
         if ($count!=0){
             return response()->json([
@@ -163,8 +164,9 @@ class UserController extends Controller
             $apply->address = $address;
             $apply->name = $name;
             $apply->id_card = $id_card;
-            $apply->lat = $lat;
-            $apply->lng = $lng;
+            $apply->city = $city;
+//            $apply->lat = $lat;
+//            $apply->lng = $lng;
             if ($apply->save()){
                 $user = new User();
                 $user->username = $phone;

@@ -19,6 +19,7 @@ class CreateDeliveryAddressesTable extends Migration
             $table->string('name');
             $table->string('number');
             $table->string('address',500);
+            $table->string('city');
             $table->float('latitude')->default(0);
             $table->float('longitude')->default(0);
             $table->timestamps();
