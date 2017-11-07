@@ -10,6 +10,7 @@ use App\Models\CommodityInfo;
 use App\Models\DeliveryAddress;
 use App\Models\Order;
 use App\Models\OrderSnapshot;
+use App\Models\Reserve;
 use App\Models\WeChatUser;
 use App\User;
 use Illuminate\Http\Request;
@@ -180,5 +181,22 @@ class UserController extends Controller
                 ]);
             }
         }
+    }
+    public function getMyReserves()
+    {
+        $uid = getUserToken(Input::get('token'));
+        $type = Input::get('type');
+        $page = Input::get('page',1);
+        $limit = Input::get('limit',10);
+        if ($type ==1){
+            $id = Reserve::where('user_id','=',$uid)->limit($limit)->offset(($page-1)*$limit)->pluck('reserve_id');
+            $reserves = DeliveryAddress::whereIn('id',$id)->get();
+        }else{
+            $reserves = DeliveryAddress::where('worker_id','=',$uid)->limit($limit)->offset(($page-1)*$limit)->get();
+        }
+        return response()->json([
+            'code'=>'200',
+            'data'=>$reserves
+        ]);
     }
 }

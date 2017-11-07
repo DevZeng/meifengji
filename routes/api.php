@@ -26,4 +26,5 @@ Route::group(['prefix'=>'v1'],function (){
     Route::post('order','API\V1\OrderController@makeOrder');
     Route::get('confirm/{id}','API\V1\OrderController@confirm');
     Route::post('worker','API\V1\UserController@addWorker');
+    Route::get('worker/reserves','API\V1\UserController@getMyReserves');
 });
