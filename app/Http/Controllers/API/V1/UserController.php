@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\API\V1;
 
 use App\Libraries\Wxxcx;
+use App\Models\ApplyForm;
 use App\Models\Attribute;
 use App\Models\Commodity;
 use App\Models\CommodityInfo;
@@ -10,6 +11,7 @@ use App\Models\DeliveryAddress;
 use App\Models\Order;
 use App\Models\OrderSnapshot;
 use App\Models\WeChatUser;
+use App\User;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\Auth;
@@ -134,6 +136,45 @@ class UserController extends Controller
                 'code'=>'500',
                 'msg'=>'用户名或密码错误！'
             ]);
+        }
+    }
+    public function addWorker()
+    {
+        $uid = getUserToken(Input::get('token'));
+        $phone = Input::get('phone');
+        $password = Input::get('password');
+        $good_at = Input::get('good_at');
+        $address = Input::get('address');
+        $name = Input::get('name');
+        $id_card = Input::get('id_card');
+        $lat = Input::get('lat');
+        $lng = Input::get('lng');
+        $count = ApplyForm::where('phone','=',$phone)->orWhere('id_card','=',$id_card)->count();
+        if ($count!=0){
+            return response()->json([
+                'code'=>'400',
+                'msg'=>'手机号或证件号已被使用！'
+            ]);
+        }else{
+            $apply = new ApplyForm();
+            $apply->user_id = $uid;
+            $apply->phone = $phone;
+            $apply->good_at = $good_at;
+            $apply->address = $address;
+            $apply->name = $name;
+            $apply->id_card = $id_card;
+            $apply->lat = $lat;
+            $apply->lng = $lng;
+            if ($apply->save()){
+                $user = new User();
+                $user->username = $phone;
+                $user->name = $name;
+                $user->password = bcrypt($password);
+                $user->save();
+                return response()->json([
+                    'code'=>'200'
+                ]);
+            }
         }
     }
 }

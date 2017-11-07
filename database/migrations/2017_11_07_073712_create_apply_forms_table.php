@@ -4,7 +4,7 @@ use Illuminate\Support\Facades\Schema;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Database\Migrations\Migration;
 
-class CreateShoppingCarsTable extends Migration
+class CreateApplyFormsTable extends Migration
 {
     /**
      * Run the migrations.
@@ -13,10 +13,16 @@ class CreateShoppingCarsTable extends Migration
      */
     public function up()
     {
-        Schema::create('shopping_cars', function (Blueprint $table) {
+        Schema::create('apply_forms', function (Blueprint $table) {
             $table->increments('id');
             $table->unsignedInteger('user_id');
-            $table->unsignedInteger('commodity_id');
+            $table->string('phone');
+            $table->string('good_at');
+            $table->string('address');
+            $table->string('name');
+            $table->string('id_card',200);
+            $table->float('lat',10,6);
+            $table->float('lng',10,6);
             $table->timestamps();
         });
     }
@@ -28,6 +34,6 @@ class CreateShoppingCarsTable extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('shopping_cars');
+        Schema::dropIfExists('apply_forms');
     }
 }

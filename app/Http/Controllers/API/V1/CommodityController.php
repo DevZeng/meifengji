@@ -117,7 +117,8 @@ class CommodityController extends Controller
         ])->get();
         if (!empty($standards)){
             for ($i=0;$i<count($standards);$i++){
-                $standards[$i]->attrs = $standards[$i]->attr()->where('state','=',1)->pluck('title');
+                $standards[$i]->commodity_title = CommodityInfo::find($standards[$i]->commodity_id)->title;
+                $standards[$i]->attrs = $standards[$i]->attr()->where('state','=',1)->get();
             }
         }
         return response()->json([
@@ -186,13 +187,25 @@ class CommodityController extends Controller
     {
         $id = Input::get('id');
         $feature = Input::get('feature');
+        $commodity_id = Input::get('commodity_id');
+        sort($feature);
         $feature = implode(',',$feature);
-        if (!empty($id)){
+        if (empty($id)){
+            $count = Commodity::where([
+                'feature'=>$feature,
+                'commodity_id'=>$commodity_id
+            ])->count();
+            if ($count != 0) {
+                return response()->json([
+                    'code'=>'400',
+                    'msg'=>'该规格商品已存在！'
+                ]);
+            }
             $commodity = new Commodity();
             $commodity->feature = $feature;
             $commodity->price = Input::get('price');
             $commodity->stock = Input::get('stock');
-            $commodity->commodity_id = Input::get('commodity_id');
+            $commodity->commodity_id = $commodity_id;
         }else{
             $commodity = Commodity::find($id);
             $commodity->feature = $feature;
@@ -225,8 +238,9 @@ class CommodityController extends Controller
             for ($i=0;$i<count($commodities);$i++){
                 $feature = $commodities[$i]->feature;
                 $feature = explode(',',$feature);
-                $featureText = Attribute::whereIn('id',$feature)->pluck('title');
+                $featureText = Attribute::whereIn('id',$feature)->get();
                 $commodities[$i]->attrs = $featureText;
+                $commodities[$i]->title = CommodityInfo::find($commodities[$i]->commodity_id)->title;
             }
         }
         return response()->json([
