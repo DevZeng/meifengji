@@ -139,7 +139,7 @@ class CommodityController extends Controller
     public function getCommodityInfo($id)
     {
         $info = CommodityInfo::find($id);
-        $info->pictures = $info->pictures()->pluck('thumb_url');
+        $info->pictures = $info->pictures()->limit(6)->pluck('thumb_url');
         if (empty($info)){
             return response()->json([
                 'code'=>'404',
@@ -177,6 +177,7 @@ class CommodityController extends Controller
             $feature2 = explode(',',$feature2);
             $attrs = Attribute::whereIn('id',$feature2)->pluck('title');
             $commodity->attrs = $attrs;
+            $commodity->picture = $commodity->pictures()->get();
         }
         return response()->json([
             'code'=>'200',
