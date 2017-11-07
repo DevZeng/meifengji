@@ -42,6 +42,7 @@ class UserController extends Controller
                     return response()->json([
                         'code'=>'200',
                         'data'=>[
+                            'worker'=>$user->worker,
                             'token'=>$token
                         ]
                     ]);
@@ -52,6 +53,7 @@ class UserController extends Controller
                 return response()->json([
                     'code'=>'200',
                     'data'=>[
+                        'worker'=>$user->worker,
                         'token'=>$token
                     ]
                 ]);
