@@ -10,7 +10,9 @@ use App\Models\DeliveryAddress;
 use App\Models\Express;
 use App\Models\Order;
 use App\Models\OrderSnapshot;
+use App\Models\Reserve;
 use App\Models\WeChatUser;
+use function GuzzleHttp\Psr7\uri_for;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\Input;
@@ -189,6 +191,32 @@ class OrderController extends Controller
                 $express->name = Input::get('name');
                 $express->track_number = Input::get('track_number');
                 $express->save();
+                return response()->json([
+                    'code'=>'200'
+                ]);
+            }
+        }
+    }
+    public function AcceptReserve($id)
+    {
+        $uid = getUserToken(Input::get('token'));
+        $reserve = Reserve::find($id);
+        if ($reserve->user_id !=$uid){
+            return response()->json([
+                'code'=>'403',
+                'msg'=>'无权操作！'
+            ]);
+        }
+        $order = DeliveryAddress::find($reserve->reserve_id);
+        if ($order->worker!=0){
+            return response()->json([
+                'code'=>'403',
+                'msg'=>'已被接单！'
+            ]);
+        }else{
+            $order->worker = $uid;
+            if ($order->save()){
+                $reserve->delete();
                 return response()->json([
                     'code'=>'200'
                 ]);
