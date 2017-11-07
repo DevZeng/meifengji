@@ -201,13 +201,13 @@ class OrderController extends Controller
     {
         $uid = getUserToken(Input::get('token'));
         $order = DeliveryAddress::find($id);
-        if ($order->worker!=0){
+        if ($order->worker_id!=0){
             return response()->json([
                 'code'=>'403',
                 'msg'=>'已被接单！'
             ]);
         }else{
-            $order->worker = $uid;
+            $order->worker_id = $uid;
             if ($order->save()){
                 Reserve::where([
                     'user_id'=>$uid,
