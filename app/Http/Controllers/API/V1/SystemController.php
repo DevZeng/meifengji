@@ -172,9 +172,18 @@ class SystemController extends Controller
     {
         $page = Input::get('page',1);
         $limit = Input::get('limit',10);
-        $applies = ApplyForm::limit($limit)->offset(($page-1))->get();
+        $state = Input::get('state');
+        if (isset($state)){
+            $applies = ApplyForm::where('state','=',$state)->limit($limit)->offset(($page-1))->get();
+            $count = ApplyForm::where('state','=',$state)->count();
+        }else{
+            $applies = ApplyForm::limit($limit)->offset(($page-1))->get();
+            $count = ApplyForm::count();
+        }
+
         return response()->json([
             'code'=>'200',
+            'count'=>$count,
             'data'=>$applies
         ]);
     }
