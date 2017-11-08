@@ -40,7 +40,7 @@ Route::group(['middleware'=>'cross'],function (){
    Route::post('commodity/picture','API\V1\CommodityController@addPicture');
    Route::get('commodity/pictures/{id}','API\V1\CommodityController@getPictures');
    Route::get('del/commodity/picture/{id}','API\V1\CommodityController@delPicture');
-   Route::get('applies','API\V1\CommodityController@listApply');
-   Route::get('review/apply/{id}','API\V1\CommodityController@reviewApply');
+   Route::get('applies','API\V1\SystemController@listApply');
+   Route::get('review/apply/{id}','API\V1\SystemController@reviewApply');
     });
 });
