@@ -140,7 +140,7 @@ class CommodityController extends Controller
     public function getCommodityInfo($id)
     {
         $info = CommodityInfo::find($id);
-        $info->pictures = $info->pictures()->limit(6)->pluck('thumb_url');
+        $info->pictures = $info->pictures()->limit(6)->get();
         if (empty($info)){
             return response()->json([
                 'code'=>'404',
