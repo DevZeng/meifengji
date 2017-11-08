@@ -16,6 +16,7 @@ use function GuzzleHttp\Psr7\uri_for;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\Input;
+use SebastianBergmann\GlobalState\Snapshot;
 
 class OrderController extends Controller
 {
@@ -228,5 +229,51 @@ class OrderController extends Controller
                 ]);
             }
         }
+    }
+    public function payNotify(Request $request)
+    {
+        $data = $request->getContent();
+        $wx = WxPay::xmlToArray($data);
+        $order = Order::where(['number'=>$wx['out_trade_no']])->first();
+        $wspay = new WxPay(config('wxxcx.app_id'),config('wxxcx.mch_id'),config('wxxcx.api_key'),$wx['openid']);
+        $data = [
+            'appid'=>$wx['appid'],
+            'cash_fee'=>$wx['cash_fee'],
+            'bank_type'=>$wx['bank_type'],
+            'fee_type'=>$wx['fee_type'],
+            'is_subscribe'=>$wx['is_subscribe'],
+            'mch_id'=>$wx['mch_id'],
+            'nonce_str'=>$wx['nonce_str'],
+            'openid'=>$wx['openid'],
+            'out_trade_no'=>$wx['out_trade_no'],
+            'result_code'=>$wx['result_code'],
+            'return_code'=>$wx['return_code'],
+            'time_end'=>$wx['time_end'],
+            'total_fee'=>$wx['total_fee'],
+            'trade_type'=>$wx['trade_type'],
+            'transaction_id'=>$wx['transaction_id']
+        ];
+        $sign = $wspay->getSign($data);
+        if ($sign == $wx['sign']){
+            if ($order->state==0){
+                $order->state =1;
+                $snapshot = Snapshot::where('number','=',$order->number)->get();
+                if (!empty($snapshot)){
+                    for ($i=0;$i<count($snapshot);$i++){
+                        $info = CommodityInfo::find($snapshot[$i]->commodity_id);
+                        $info->sales += $snapshot[$i]->count;
+                        $info->save();
+                        $commodity = Commodity::find($snapshot[$i]->product_id);
+                        $commodity->stock -= $snapshot[$i]->count;
+                        $commodity->save();
+                    }
+                }
+                if ($order->save()){
+                    return 'SUCCESS';
+                }
+            }
+
+        }
+        return 'ERROR';
     }
 }
