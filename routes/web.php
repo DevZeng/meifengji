@@ -34,6 +34,8 @@ Route::group(['middleware'=>'cross'],function (){
    Route::get('order/{id}','API\V1\OrderController@getOrder');
    Route::get('adverts','API\V1\SystemController@getAdverts');
    Route::post('advert','API\V1\SystemController@addAdvert');
+   Route::post('article','API\V1\SystemController@addArticle');
+   Route::get('articles','API\V1\SystemController@getArticles');
    Route::post('commodity/picture','API\V1\CommodityController@addPicture');
    Route::get('commodity/pictures/{id}','API\V1\CommodityController@getPictures');
    Route::get('del/commodity/picture/{id}','API\V1\CommodityController@delPicture');

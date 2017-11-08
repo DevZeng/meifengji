@@ -44,6 +44,7 @@ class UserController extends Controller
                         'code'=>'200',
                         'data'=>[
                             'worker'=>$user->worker,
+                            'apply'=>0,
                             'token'=>$token
                         ]
                     ]);
@@ -51,10 +52,12 @@ class UserController extends Controller
             } else {
                 $token = createNoncestr(16);
                 setUserToken($token,$user->id);
+                $count = ApplyForm::where('user_id','=',$user->id)->count();
                 return response()->json([
                     'code'=>'200',
                     'data'=>[
                         'worker'=>$user->worker,
+                        'apply'=>$count,
                         'token'=>$token
                     ]
                 ]);

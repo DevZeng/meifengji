@@ -103,6 +103,30 @@ class SystemController extends Controller
             'data'=>$article
         ]);
     }
+    public function addArticle()
+    {
+        $id = Input::get('id');
+        if ($id){
+            $article = Article::find($id);
+        }else{
+            $article = new Article();
+        }
+        $article->content = Input::get('content');
+        $article->type = Input::get('type');
+        if ($article->save()){
+            return response()->json([
+                'code'=>'200'
+            ]);
+        }
+    }
+    public function getArticles()
+    {
+        $article = Article::all();
+        return response()->json([
+            'code'=>'200',
+            'data'=>$article
+        ]);
+    }
     public function sendSms($number,$code,$data)
     {
         $sms = new AliyunSMS();
