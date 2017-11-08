@@ -20,7 +20,7 @@ class CommodityController extends Controller
         $limit = $request->input('limit',10);
         $title = $request->input('title');
         if (!empty($title)){
-            $commodities = CommodityInfo::where('title','like','%'.$title.'%')->get();
+            $commodities = CommodityInfo::where('state','=',1)->where('title','like','%'.$title.'%')->get();
         }else{
             $commodities = CommodityInfo::where('state','=',1)->limit($limit)->offset(($page-1)*$limit)->get();
         }
