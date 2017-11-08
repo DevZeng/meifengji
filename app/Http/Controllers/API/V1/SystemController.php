@@ -4,7 +4,9 @@ namespace App\Http\Controllers\API\V1;
 
 use App\Libraries\AliyunSMS;
 use App\Models\Advert;
+use App\Models\ApplyForm;
 use App\Models\Article;
+use App\Models\WeChatUser;
 use Intervention\Image\Facades\Image;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
@@ -165,5 +167,39 @@ class SystemController extends Controller
             'code'=>'500',
             'msg'=>'短信发送失败！'
         ]);
+    }
+    public function listApply()
+    {
+        $page = Input::get('page',1);
+        $limit = Input::get('limit',10);
+        $applies = ApplyForm::limit($limit)->offset(($page-1))->get();
+        return response()->json([
+            'code'=>'200',
+            'data'=>$applies
+        ]);
+    }
+    public function reviewApply($id)
+    {
+        $state = Input::get('state');
+        if ($state==1){
+            $apply = ApplyForm::find($id);
+            $apply->state = 1;
+            $apply->save();
+            $user = WeChatUser::find($apply->user_id);
+            $user->worker =1;
+            $user->save();
+            return response()->json([
+                'code'=>'200'
+            ]);
+//            if ($this->sendSms($apply->phone))
+        }else{
+            $apply = ApplyForm::find($id);
+            $apply->state = 2;
+            $apply->save();
+
+            return response()->json([
+                'code'=>'200'
+            ]);
+        }
     }
 }
