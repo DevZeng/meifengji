@@ -11,5 +11,6 @@ return [
     'company'=>'美家美缝服务中心',
     'VerificationCode'=>'SMS_109420184',
     'Notify'=>'SMS_109345194',
-    'Pass'=>'SMS_109565185'
+    'Pass'=>'SMS_109565185',
+    'Fail'=>'SMS_109555201'
 ];
