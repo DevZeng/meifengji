@@ -62,7 +62,7 @@ class SystemController extends Controller
                 'return_msg'=>'非法文件名'
             ]);
         }
-        $allow = Config::get('fileAllow');
+        $allow = \config('fileAllow');
         if (!in_array($name[1],$allow)){
             return response()->json([
                 'return_code'=>'FAIL',

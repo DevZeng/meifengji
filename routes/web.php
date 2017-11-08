@@ -16,7 +16,7 @@ Route::get('/', function () {
 });
 Route::group(['middleware'=>'cross'],function (){
     Route::post('login','API\V1\UserController@adminLogin');
-    Route::post('upload','API\V1\SystemController@uploadImage');
+    Route::any('upload','API\V1\SystemController@uploadImage');
     Route::group(['middleware'=>'auth'],function (){
 //   Route::post();
    Route::get('reserves','API\V1\OrderController@getReserves');
