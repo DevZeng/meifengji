@@ -151,6 +151,14 @@ class UserController extends Controller
         $name = Input::get('name');
         $id_card = Input::get('id_card');
         $city = Input::get('city');
+        $sms = Input::get('sms');
+        $code = getCode($phone);
+        if ($code!=$sms){
+            return response()->json([
+                'code'=>'400',
+                'msg'=>'验证码错误！'
+            ]);
+        }
 //        $lat = Input::get('lat');
 //        $lng = Input::get('lng');
         $count = ApplyForm::where('phone','=',$phone)->orWhere('id_card','=',$id_card)->count();

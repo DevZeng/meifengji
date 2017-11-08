@@ -38,3 +38,27 @@ if (!function_exists('formatUrl')) {
         return 'http://119.23.255.177:8091/uploads/'.$url;
     }
 }
+if (!function_exists('setCode')){
+    function setCode($key,$value)
+    {
+        \Illuminate\Support\Facades\Redis::set($key,$value);
+        \Illuminate\Support\Facades\Redis::expire($key,900);
+
+    }
+}
+if (!function_exists('getCode')) {
+    function getCode($phone)
+    {
+        $code = \Illuminate\Support\Facades\Redis::get($phone);
+        if (!isset($code)){
+            return false;
+        }
+        return $code;
+    }
+}
+if (!function_exists('getRandCode')){
+    function getRandCode($length = 6)
+    {
+        return rand(pow(10,($length-1)), pow(10,$length)-1);
+    }
+}

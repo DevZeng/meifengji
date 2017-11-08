@@ -140,6 +140,12 @@ class OrderController extends Controller
                 $count = Order::where('state','!=','0')->limit($limit)->offset(($page-1)*$limit)->count();
             }
         }
+        if(!empty($order)){
+            for ($i=0; $i<count($order);$i++){
+                $order[$i]->username = WeChatUser::find($order[$i]->user_id)->nickname;
+            }
+        }
+//        dd($order);
         return response()->json([
             'code'=>'200',
             'count'=>$count,

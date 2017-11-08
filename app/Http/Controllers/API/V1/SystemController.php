@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers\API\V1;
 
+use App\Libraries\AliyunSMS;
 use App\Models\Advert;
 use App\Models\Article;
 use Intervention\Image\Facades\Image;
@@ -100,6 +101,36 @@ class SystemController extends Controller
         return response()->json([
             'code'=>'200',
             'data'=>$article
+        ]);
+    }
+    public function sendSms($number,$code,$data)
+    {
+        $sms = new AliyunSMS();
+        $data = $sms->send($number,\config('alisms.company'),json_encode($data),$code);
+        if($data){
+            $data = json_decode($data);
+            if ($data->success=='true'){
+                return true;
+            }
+            return false;
+        }
+        return false;
+    }
+    public function sendCode()
+    {
+        $phone = Input::get('phone');
+        $code = getRandCode();
+        $data = [
+            'msg'=>$code
+        ];
+        if ($this->sendSms($phone,\config('alisms.VerificationCode'),$data)){
+            return response()->json([
+                'code'=>'200'
+            ]);
+        }
+        return response()->json([
+            'code'=>'500',
+            'msg'=>'短信发送失败！'
         ]);
     }
 }

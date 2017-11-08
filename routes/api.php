@@ -29,4 +29,5 @@ Route::group(['prefix'=>'v1'],function (){
     Route::get('worker/reserves','API\V1\UserController@getMyReserves');
     Route::get('accept/reserve/{id}','API\V1\OrderController@AcceptReserve');
     Route::get('article','API\V1\SystemController@getArticle');
+    Route::post('code','API\V1\SystemController@sendCode');
 });
