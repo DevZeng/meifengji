@@ -106,7 +106,7 @@ class SystemController extends Controller
     public function sendSms($number,$code,$data)
     {
         $sms = new AliyunSMS();
-        $data = $sms->send($number,\config('alisms.company'),json_encode($data),\config('alisms.VerificationCode'));
+        $data = $sms->send($number,\config('alisms.company'),json_encode($data),$code);
         if($data){
             $data = json_decode($data);
             if ($data->success=='true'){
