@@ -45,6 +45,15 @@ class SystemController extends Controller
             ]);
         }
     }
+    public function delAdvert($id)
+    {
+        $advert = Advert::find($id);
+        if ($advert->delete()){
+            return response()->json([
+                'code'=>'200'
+            ]);
+        }
+    }
     public function uploadImage(Request $request)
     {
         if (!$request->hasFile('image')){
