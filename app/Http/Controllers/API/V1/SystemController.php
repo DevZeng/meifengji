@@ -197,15 +197,26 @@ class SystemController extends Controller
             $user = WeChatUser::find($apply->user_id);
             $user->worker =1;
             $user->save();
+            $smsContent = [
+                'msg'=>$apply->name
+            ];
+            if ($this->sendSms($apply->phone,\config('alisms.Pass'),$smsContent)){
+                return response()->json([
+                    'code'=>'200'
+                ]);
+            }
             return response()->json([
                 'code'=>'200'
             ]);
-//            if ($this->sendSms($apply->phone))
         }else{
             $apply = ApplyForm::find($id);
             $apply->state = 2;
             $apply->save();
-
+            if ($this->sendSms($apply->number,\config('alisms.Fail'),[])){
+                return response()->json([
+                    'code'=>'200'
+                ]);
+            }
             return response()->json([
                 'code'=>'200'
             ]);

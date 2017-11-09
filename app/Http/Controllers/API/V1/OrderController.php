@@ -2,7 +2,9 @@
 
 namespace App\Http\Controllers\API\V1;
 
+use App\Libraries\AliyunSMS;
 use App\Libraries\WxPay;
+use App\Models\ApplyForm;
 use App\Models\Attribute;
 use App\Models\Commodity;
 use App\Models\CommodityInfo;
@@ -33,6 +35,17 @@ class OrderController extends Controller
 //        $address->longitude = Input::get('longitude');
         $address->city = Input::get('city');
         if ($address->save()){
+            $applies = ApplyForm::where('city','=',$address->city)->get();
+            if(!empty($applies)){
+                for ($i=0;$i<count($applies);$i++){
+                    $reserves = new Reserve();
+                    $reserves ->user_id = $applies[$i]->user_id;
+                    $reserves ->reserve_id = $address->id;
+                    $reserves->save();
+                    $sms = new AliyunSMS();
+                    $sms->send($applies[$i]->phone,config('alisms.company'),[],config('alisms.Notify'));
+                }
+            }
             return response()->json([
                 'code'=>'200'
             ]);
