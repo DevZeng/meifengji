@@ -14,7 +14,7 @@ use Illuminate\Http\Request;
 */
 Route::get('test',function (){
     $sms = new \App\Libraries\AliyunSMS();
-    $data = $sms->send('18664894928','美家美缝服务中心',json_encode(['param'=>'1']),'SMS_109345194');
+    $data = $sms->send('17620706421','美家美缝服务中心',json_encode(['param'=>'1']),'SMS_109555201');
     dd($data);
 });
 Route::group(['prefix'=>'v1'],function (){
