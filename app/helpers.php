@@ -34,8 +34,8 @@ if (!function_exists('getUserToken')) {
 if (!function_exists('formatUrl')) {
     function formatUrl($url)
     {
-//        return env('APP_URL').$url;
-        return 'http://119.23.255.177:8090/'.$url;
+        return env('APP_URL').$url;
+//        return 'http://119.23.255.177:8090/'.$url;
     }
 }
 if (!function_exists('setCode')){
