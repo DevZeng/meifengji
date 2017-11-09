@@ -14,11 +14,7 @@
 Route::get('/', function () {
     return view('welcome');
 });
-Route::get('test',function (){
-   $sms = new \App\Libraries\AliyunSMS();
-   $data = $sms->send('18664894928','美家美缝服务中心',json_encode([]),'SMS_109345194');
-   dd($data);
-});
+
 Route::group(['middleware'=>'cross'],function (){
     Route::post('login','API\V1\UserController@adminLogin');
     Route::any('upload','API\V1\SystemController@uploadImage');
