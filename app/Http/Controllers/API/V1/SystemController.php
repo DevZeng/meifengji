@@ -212,7 +212,7 @@ class SystemController extends Controller
             $apply = ApplyForm::find($id);
             $apply->state = 2;
             $apply->save();
-            if ($this->sendSms($apply->number,\config('alisms.Fail'),[])){
+            if ($this->sendSms($apply->number,\config('alisms.Fail'),'')){
                 return response()->json([
                     'code'=>'200'
                 ]);
