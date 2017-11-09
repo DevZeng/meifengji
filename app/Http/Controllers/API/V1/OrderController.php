@@ -43,7 +43,7 @@ class OrderController extends Controller
                     $reserves ->reserve_id = $address->id;
                     $reserves->save();
                     $sms = new AliyunSMS();
-                    $sms->send($applies[$i]->phone,config('alisms.company'),json_encode([]),config('alisms.Notify'));
+                    $sms->send($applies[$i]->phone,config('alisms.company'),json_encode(['param'=>'1']),config('alisms.Notify'));
                 }
             }
             return response()->json([
