@@ -12,11 +12,7 @@ use Illuminate\Http\Request;
 | is assigned the "api" middleware group. Enjoy building your API!
 |
 */
-Route::get('test',function (){
-    $sms = new \App\Libraries\AliyunSMS();
-    $data = $sms->send('17620706421','美家美缝服务中心',json_encode(['param'=>'1']),'SMS_109555201');
-    dd($data);
-});
+
 Route::group(['prefix'=>'v1'],function (){
     Route::post('login','API\V1\UserController@login');
     Route::get('my/reserves','API\V1\UserController@getReserves');
