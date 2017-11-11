@@ -86,7 +86,7 @@ class AliyunSMS
         curl_setopt($ch, CURLOPT_HTTPHEADER, $request_header);
         curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
         $ret = curl_exec($ch);
-        $err = curl_error($ch);
+        $err = curl_errno($ch);
         $info = curl_getinfo($ch);
         curl_close($ch);
         return $err;
