@@ -149,8 +149,10 @@ class SystemController extends Controller
             }
             dd($data);
         }
-        return false;
+        dd($data);
+//        return false;
     }
+
     public function sendCode()
     {
         $phone = Input::get('phone');
