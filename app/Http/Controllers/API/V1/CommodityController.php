@@ -10,6 +10,7 @@ use App\Models\Standard;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\Input;
+use Illuminate\Validation\Rules\In;
 
 class CommodityController extends Controller
 {
@@ -54,9 +55,18 @@ class CommodityController extends Controller
         $info->description = Input::get('description');
         $info->content = Input::get('content');
         if ($info->save()){
+//            CommodityPicture::where('commodity_id','=',$info->id)->delete();
             $images = Input::get('images');
-            foreach ($images as $image){
-
+            if (!empty($images)){
+                foreach ($images as $image){
+                    $img = new CommodityPicture();
+                    $path = 'uploads/';
+                    $img->commodity_id = $info->id;
+                    $img->product_id = 0;
+                    $img->thumb_url = formatUrl($path.'thumb_'.$image);
+                    $img->url = formatUrl($path.$image);
+                    $img->save();
+                }
             }
             return response()->json([
                 'code'=>'200'
@@ -75,6 +85,11 @@ class CommodityController extends Controller
             $commodities = CommodityInfo::where('state','=',1)->limit($limit)->offset(($page-1)*$limit)->get();
             $count = CommodityInfo::where('state','=',1)->limit($limit)->offset(($page-1)*$limit)->count();
         }
+        if (!empty($commodities)){
+            for ($i=0;$i<count($commodities);$i++){
+                $commodities[$i]->pictures = $commodities[$i]->pictures()->get();
+            }
+        }
         return response()->json([
             'code'=>'200',
             'count'=>$count,
@@ -92,13 +107,11 @@ class CommodityController extends Controller
         }
     }
 
-    public function addStandard()
+    public function addStandard($id)
     {
         $title = Input::get('title');
-        $cid = Input::get('commodity_id');
-        $standard = new Standard();
+        $standard = Standard::find($id);
         $standard->title = $title;
-        $standard->commodity_id = $cid;
         if ($standard->save()){
             $attrs = Input::get('attrs');
             if (!empty($attrs)){
@@ -113,6 +126,44 @@ class CommodityController extends Controller
                 'code'=>'200'
             ]);
         }
+    }
+    public function delAttr($id)
+    {
+        $attr = Attribute::find($id);
+        $attr->state = 0;
+        if ($attr->save()){
+            return response()->json([
+                'code'=>'200'
+            ]);
+        }
+    }
+    public function addStandards()
+    {
+        $commodity_id = Input::get('commodity_id');
+        $standards = Input::get('standards');
+        if (empty($standards)){
+            return response()->json([
+                'code'=>'400',
+                'msg'=>'参数不能为空！'
+            ]);
+        }
+        foreach ($standards as $standard){
+            $stan = new Standard();
+            $stan->title = $standard['title'];
+            $stan->commodity_id = $commodity_id;
+            $stan->save();
+            if (!empty($standard['attrs'])){
+                foreach ($standard['attrs'] as $attr){
+                    $attribute = new Attribute();
+                    $attribute->title = $attr;
+                    $attribute->standard_id = $stan->id;
+                    $attribute->save();
+                }
+            }
+        }
+        return response()->json([
+            'code'=>'200'
+        ]);
     }
     public function getStandards($id)
     {
@@ -219,6 +270,20 @@ class CommodityController extends Controller
             $commodity->stock = Input::get('stock');
         }
         if ($commodity->save()){
+            $image = Input::get('image');
+            if (!empty($image)){
+                CommodityPicture::where([
+                    'commodity_id'=>$commodity->commodity_id,
+                    'product_id'=>$commodity->id
+                ])->delete();
+                $picture = new CommodityPicture();
+                $path = 'uploads/';
+                $picture->commodity_id = $commodity->commodity_id;
+                $picture->product_id = $commodity->id;
+                $picture->url = formatUrl($path.$image);
+                $picture->thumb_url = formatUrl($path.'thumb_'.$image);
+                $picture->save();
+            }
             return response()->json([
                 'code'=>'200'
             ]);
@@ -240,6 +305,10 @@ class CommodityController extends Controller
             'commodity_id'=>$id,
             'state'=>1
         ])->get();
+        $count = Commodity::where([
+            'commodity_id'=>$id,
+            'state'=>1
+        ])->count();
         if (!empty($commodities)){
             for ($i=0;$i<count($commodities);$i++){
                 $feature = $commodities[$i]->feature;
@@ -247,10 +316,12 @@ class CommodityController extends Controller
                 $featureText = Attribute::whereIn('id',$feature)->get();
                 $commodities[$i]->attrs = $featureText;
                 $commodities[$i]->title = CommodityInfo::find($commodities[$i]->commodity_id)->title;
+                $commodities[$i]->pictures = $commodities[$i]->pictures()->first();
             }
         }
         return response()->json([
             'code'=>'200',
+            'count'=>$count,
             'data'=>$commodities
         ]);
     }

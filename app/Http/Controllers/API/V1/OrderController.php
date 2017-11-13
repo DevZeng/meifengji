@@ -59,12 +59,12 @@ class OrderController extends Controller
         if (!empty($state)){
             $reserves = DeliveryAddress::where([
                 'state'=>$state
-            ])->limit($limit)->offset(($page-1)*$limit)->get();
+            ])->limit($limit)->offset(($page-1)*$limit)->orderBy('id','DESC')->get();
             $count = DeliveryAddress::where([
                 'state'=>$state
             ])->limit($limit)->offset(($page-1)*$limit)->count();
         }else{
-            $reserves = DeliveryAddress::limit($limit)->offset(($page-1)*$limit)->get();
+            $reserves = DeliveryAddress::limit($limit)->offset(($page-1)*$limit)->orderBy('id','DESC')->get();
             $count = DeliveryAddress::limit($limit)->offset(($page-1)*$limit)->count();
         }
         return response()->json([
