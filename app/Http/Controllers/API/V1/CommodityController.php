@@ -54,6 +54,10 @@ class CommodityController extends Controller
         $info->description = Input::get('description');
         $info->content = Input::get('content');
         if ($info->save()){
+            $images = Input::get('images');
+            foreach ($images as $image){
+
+            }
             return response()->json([
                 'code'=>'200'
             ]);
@@ -148,7 +152,7 @@ class CommodityController extends Controller
             ]);
         }
         $info->price = $info->commodities()->orderBy('price','ASC')->pluck('price')->first();
-        $standards = $info->standards()->get();
+        $standards = $info->standards()->where('state','=',1)->get();
         if (!empty($standards)){
             for ($i=0;$i<count($standards);$i++){
                 $standards[$i]->attrs = $standards[$i]->attr()->get();
