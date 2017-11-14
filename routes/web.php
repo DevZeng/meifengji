@@ -17,6 +17,7 @@ Route::get('/', function () {
 
 Route::group(['middleware'=>'cross'],function (){
     Route::post('login','API\V1\UserController@adminLogin');
+    Route::get('workers','API\V1\UserController@getWorkers');
     Route::any('upload','API\V1\SystemController@uploadImage');
     Route::group(['middleware'=>'auth'],function (){
 //   Route::post();

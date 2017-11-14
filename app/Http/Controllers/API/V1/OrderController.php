@@ -35,7 +35,7 @@ class OrderController extends Controller
 //        $address->longitude = Input::get('longitude');
         $address->city = Input::get('city');
         if ($address->save()){
-            $applies = ApplyForm::where('city','like',$address->city)->get();
+            $applies = ApplyForm::where('city','like',$address->city)->where('state','=',1)->get();
             if(!empty($applies)){
                 for ($i=0;$i<count($applies);$i++){
                     $reserves = new Reserve();
@@ -66,6 +66,14 @@ class OrderController extends Controller
         }else{
             $reserves = DeliveryAddress::limit($limit)->offset(($page-1)*$limit)->orderBy('id','DESC')->get();
             $count = DeliveryAddress::limit($limit)->offset(($page-1)*$limit)->count();
+        }
+        if (!empty($reserves)){
+            for ($i=0;$i<count($reserves);$i++){
+                $info = ApplyForm::where([
+                    'user_id'=>$reserves[$i]->worker
+                ])->first();
+                $reserves[$i]->worker = empty($info)?'':$info->name;
+            }
         }
         return response()->json([
             'code'=>'200',

@@ -13,6 +13,7 @@ use App\Models\OrderSnapshot;
 use App\Models\Reserve;
 use App\Models\WeChatUser;
 use App\User;
+use function GuzzleHttp\Psr7\uri_for;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\Auth;
@@ -208,6 +209,51 @@ class UserController extends Controller
         return response()->json([
             'code'=>'200',
             'data'=>$reserves
+        ]);
+    }
+    public function getWorkers()
+    {
+        $page = Input::get('page',1);
+        $limit = Input::get('limit',10);
+        $name = Input::get('name');
+        $idcard = Input::get('id_card');
+        $province = Input::get('province');
+        $start = Input::get('start');
+        $end = Input::get('end');
+        $search = Input::get('search');
+        if ($search){
+            $applyDb = ApplyForm::where('state','=',1);
+            if ($name){
+                $applyDb->where('name','like','%'.$name.'%');
+            }
+            if ($province){
+                $applyDb->where('city','like','%'.$province.'%');
+            }
+            if ($idcard){
+                $applyDb->where('id_card','like','%'.$idcard.'%');
+            }
+            if ($start){
+                $applyDb->where('created_at','>',$start)->where('created_at','<',$end);
+            }
+            $ids = $applyDb->pluck('user_id');
+//            dd($ids);
+            $count = WeChatUser::whereIn('id',$ids)->count();
+            $workers = WeChatUser::whereIn('id',$ids)->limit($limit)->offset(($page-1)*$limit)->get();
+        }else{
+            $count = WeChatUser::where('worker','=',1)->count();
+            $workers = WeChatUser::where('worker','=',1)->limit($limit)->offset(($page-1)*$limit)->get();
+        }
+
+        if (!empty($workers)){
+            for ($i=0;$i<count($workers);$i++){
+                $workers[$i]->apply = $workers[$i]->apply()->first();
+                $workers[$i]->count = DeliveryAddress::where('worker','=',$workers[$i]->id)->count();
+            }
+        }
+        return response()->json([
+            'code'=>'200',
+            'count'=>$count,
+            'data'=>$workers
         ]);
     }
 }

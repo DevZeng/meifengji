@@ -301,14 +301,16 @@ class CommodityController extends Controller
     }
     public function getProducts($id)
     {
+        $page = Input::get('page',1);
+        $limit = Input::get('limit',10);
         $commodities = Commodity::where([
             'commodity_id'=>$id,
             'state'=>1
-        ])->get();
+        ])->limit($limit)->offset(($page-1)*$limit)->get();
         $count = Commodity::where([
             'commodity_id'=>$id,
             'state'=>1
-        ])->count();
+        ])->limit($limit)->offset(($page-1)*$limit)->count();
         if (!empty($commodities)){
             for ($i=0;$i<count($commodities);$i++){
                 $feature = $commodities[$i]->feature;

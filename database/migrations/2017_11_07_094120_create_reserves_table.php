@@ -17,6 +17,7 @@ class CreateReservesTable extends Migration
             $table->increments('id');
             $table->unsignedInteger('user_id');
             $table->unsignedInteger('reserve_id');
+            $table->tinyInteger('state')->default(0);
             $table->timestamps();
         });
     }
