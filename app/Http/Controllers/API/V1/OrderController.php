@@ -35,7 +35,7 @@ class OrderController extends Controller
 //        $address->longitude = Input::get('longitude');
         $address->city = Input::get('city');
         if ($address->save()){
-            $applies = ApplyForm::where('city','=',$address->city)->get();
+            $applies = ApplyForm::where('city','like',$address->city)->get();
             if(!empty($applies)){
                 for ($i=0;$i<count($applies);$i++){
                     $reserves = new Reserve();
