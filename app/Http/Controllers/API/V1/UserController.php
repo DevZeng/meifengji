@@ -59,7 +59,8 @@ class UserController extends Controller
                     'data'=>[
                         'worker'=>$user->worker,
                         'apply'=>$count,
-                        'token'=>$token
+                        'token'=>$token,
+                        'enable'=>$user->enable
                     ]
                 ]);
             }
@@ -254,6 +255,16 @@ class UserController extends Controller
             'code'=>'200',
             'count'=>$count,
             'data'=>$workers
+        ]);
+    }
+    public function modifyWorker($id)
+    {
+        $worker = WeChatUser::find($id);
+        $enable = $worker->enable;
+        $worker->enable = ($enable==0)?1:0;
+        $worker->save();
+        return response()->json([
+            'code'=>'200'
         ]);
     }
 }

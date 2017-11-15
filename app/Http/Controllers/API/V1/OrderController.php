@@ -212,9 +212,12 @@ class OrderController extends Controller
                 'msg'=>'非可操作状态！'
             ]);
         }else{
-            $order->state = 1;
+            $order->state = 2;
             if ($order->save()){
-                $express = new Express();
+                $express = Express::where('number','=',$order->number)->first();
+                if (empty($express)){
+                    $express = new Express();
+                }
                 $express->number = $order->number;
                 $express->name = Input::get('name');
                 $express->track_number = Input::get('track_number');
@@ -296,5 +299,21 @@ class OrderController extends Controller
 
         }
         return 'ERROR';
+    }
+    public function addExpress($id)
+    {
+        $order = Order::find($id);
+        $express = Express::where('number','=',$order->number)->first();
+        if (empty($express)){
+            $express = new Express();
+        }
+        $express->number = $order->number;
+        $express->name = Input::get('name');
+        $express->track_number = Input::get('track_number');
+        if ($express->save()){
+            return response()->json([
+                'code'=>'200'
+            ]);
+        }
     }
 }
