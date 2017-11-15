@@ -81,7 +81,7 @@ class UserController extends Controller
         $reserves = DeliveryAddress::where([
             'user_id'=>$uid,
             'state'=>$state
-        ])->limit($limit)->offset(($page-1)*$limit)->get();
+        ])->limit($limit)->offset(($page-1)*$limit)->orderBy('id','DESC')->get();
         return response()->json([
             'code'=>'200',
             'data'=>$reserves
@@ -96,7 +96,7 @@ class UserController extends Controller
         $orders = Order::where([
             'user_id'=>$uid,
             'state'=>$state
-        ])->limit($limit)->offset(($page-1)*$limit)->get();
+        ])->limit($limit)->offset(($page-1)*$limit)->orderBy('id','DESC')->get();
         $this->formatOrder($orders);
         return response()->json([
             'code'=>'200',
@@ -205,9 +205,9 @@ class UserController extends Controller
         $limit = Input::get('limit',10);
         if ($type ==1){
             $id = Reserve::where('user_id','=',$uid)->limit($limit)->offset(($page-1)*$limit)->pluck('reserve_id');
-            $reserves = DeliveryAddress::whereIn('id',$id)->get();
+            $reserves = DeliveryAddress::whereIn('id',$id)->orderBy('id','DESC')->get();
         }else{
-            $reserves = DeliveryAddress::where('worker_id','=',$uid)->limit($limit)->offset(($page-1)*$limit)->get();
+            $reserves = DeliveryAddress::where('worker_id','=',$uid)->limit($limit)->offset(($page-1)*$limit)->orderBy('id','DESC')->get();
         }
         return response()->json([
             'code'=>'200',
