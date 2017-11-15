@@ -55,6 +55,7 @@ class CommodityController extends Controller
         $info->description = Input::get('description');
         $info->content = Input::get('content');
         $info->cover = Input::get('cover');
+        $info->sales = Input::get('sales');
         if ($info->save()){
 //            CommodityPicture::where('commodity_id','=',$info->id)->delete();
             $images = Input::get('images');
