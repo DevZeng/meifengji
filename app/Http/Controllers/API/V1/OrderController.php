@@ -258,11 +258,7 @@ class OrderController extends Controller
     public function payNotify(Request $request)
     {
         $data = $request->getContent();
-        $handle = fopen('data.txt','a+');
-        fwrite($handle,$data);
-        fclose($handle);
         $wx = WxPay::xmlToArray($data);
-        $order = Order::where(['number'=>$wx['out_trade_no']])->first();
         $wspay = new WxPay(config('wxxcx.app_id'),config('wxxcx.mch_id'),config('wxxcx.api_key'),$wx['openid']);
         $data = [
             'appid'=>$wx['appid'],
@@ -282,10 +278,8 @@ class OrderController extends Controller
             'transaction_id'=>$wx['transaction_id']
         ];
         $sign = $wspay->getSign($data);
-        $handle = fopen('log.txt','a+');
-        fwrite($handle,$sign);
-        fclose($handle);
         if ($sign == $wx['sign']){
+            $order = Order::where(['number'=>$wx['out_trade_no']])->first();
             if ($order->state==0){
                 $order->state =1;
                 $snapshot = Snapshot::where('number','=',$order->number)->get();
