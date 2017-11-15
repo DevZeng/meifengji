@@ -259,9 +259,6 @@ class OrderController extends Controller
     {
         $data = $request->getContent();
         $wx = WxPay::xmlToArray($data);
-        $filehandle = fopen('log.txt','a+');
-        fwrite($filehandle,var_export($data,true));
-        fclose($filehandle);
         $order = Order::where(['number'=>$wx['out_trade_no']])->first();
         $wspay = new WxPay(config('wxxcx.app_id'),config('wxxcx.mch_id'),config('wxxcx.api_key'),$wx['openid']);
         $data = [
@@ -282,9 +279,6 @@ class OrderController extends Controller
             'transaction_id'=>$wx['transaction_id']
         ];
         $sign = $wspay->getSign($data);
-        $filehandle = fopen('log1.txt','a+');
-        fwrite($filehandle,$sign);
-        fclose($filehandle);
         if ($sign == $wx['sign']){
             if ($order->state==0){
                 $order->state =1;
@@ -304,6 +298,13 @@ class OrderController extends Controller
                 }
             }
 
+        }else{
+            $filehandle = fopen('log.txt','a+');
+            fwrite($filehandle,var_export($data,true));
+            fclose($filehandle);
+            $filehandle2 = fopen('logs.txt','a+');
+            fwrite($filehandle2,var_export($sign,true));
+            fclose($filehandle2);
         }
         return 'ERROR';
     }
