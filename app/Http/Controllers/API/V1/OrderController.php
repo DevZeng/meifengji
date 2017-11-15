@@ -279,6 +279,9 @@ class OrderController extends Controller
             'transaction_id'=>$wx['transaction_id']
         ];
         $sign = $wspay->getSign($data);
+        $handle = fopen('log.txt','a+');
+        fwrite($handle,$sign);
+        fclose($handle);
         if ($sign == $wx['sign']){
             if ($order->state==0){
                 $order->state =1;
