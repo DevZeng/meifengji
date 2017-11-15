@@ -46,7 +46,8 @@ class UserController extends Controller
                         'data'=>[
                             'worker'=>$user->worker,
                             'apply'=>0,
-                            'token'=>$token
+                            'token'=>$token,
+                            'enable'=>$user->enable
                         ]
                     ]);
                 }
