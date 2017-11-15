@@ -139,6 +139,7 @@ class OrderController extends Controller
             ]);
         }
         $order->state = 3;
+        $order->comment = Input::get('comment','');
         $order->save();
         return response()->json([
             'code'=>'200'
