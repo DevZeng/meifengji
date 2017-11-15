@@ -259,6 +259,9 @@ class OrderController extends Controller
     {
         $data = $request->getContent();
         $wx = WxPay::xmlToArray($data);
+        $filehandle = fopen('log.txt','a+');
+        fwrite($filehandle,var_export($data,true));
+        fclose($filehandle);
         $order = Order::where(['number'=>$wx['out_trade_no']])->first();
         $wspay = new WxPay(config('wxxcx.app_id'),config('wxxcx.mch_id'),config('wxxcx.api_key'),$wx['openid']);
         $data = [
