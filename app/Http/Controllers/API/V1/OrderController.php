@@ -165,7 +165,7 @@ class OrderController extends Controller
         if(!empty($order)){
             for ($i=0; $i<count($order);$i++){
                 $order[$i]->username = WeChatUser::find($order[$i]->user_id)->nickname;
-                $order[$i]->express = $order[$i]->express()->first();
+
             }
         }
 //        dd($order);
