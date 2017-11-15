@@ -282,6 +282,7 @@ class OrderController extends Controller
             $order = Order::where(['number'=>$wx['out_trade_no']])->first();
             if ($order->state==0){
                 $order->state =1;
+                $order->save();
                 $snapshot = Snapshot::where('number','=',$order->number)->get();
 //                if (!empty($snapshot)){
 //                    for ($i=0;$i<count($snapshot);$i++){
