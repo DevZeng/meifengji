@@ -113,7 +113,7 @@ class UserController extends Controller
             $snapshots = OrderSnapshot::where('number','=',$orders[$i]->number)->get();
             $this->formatSnapshots($snapshots);
             $orders[$i]->snapshots = $snapshots;
-            $order[$i]->express = $orders[$i]->express()->first();
+            $orders[$i]->express = $orders[$i]->express()->first();
         }
     }
     public function formatSnapshots($snapshots)
