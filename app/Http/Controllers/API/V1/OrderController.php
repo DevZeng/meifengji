@@ -319,4 +319,15 @@ class OrderController extends Controller
             ]);
         }
     }
+    public function noAccept()
+    {
+        $uid = getUserToken(Input::get('token'));
+        $count = Reserve::where('user_id','=',$uid)->count();
+        return response()->json([
+            'code'=>'200',
+            'data'=>[
+                'count'=>$count
+            ]
+        ]);
+    }
 }
