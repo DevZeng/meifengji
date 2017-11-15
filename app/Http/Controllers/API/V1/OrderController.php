@@ -283,28 +283,21 @@ class OrderController extends Controller
             if ($order->state==0){
                 $order->state =1;
                 $snapshot = Snapshot::where('number','=',$order->number)->get();
-                if (!empty($snapshot)){
-                    for ($i=0;$i<count($snapshot);$i++){
-                        $info = CommodityInfo::find($snapshot[$i]->commodity_id);
-                        $info->sales += $snapshot[$i]->count;
-                        $info->save();
-                        $commodity = Commodity::find($snapshot[$i]->product_id);
-                        $commodity->stock -= $snapshot[$i]->count;
-                        $commodity->save();
-                    }
-                }
+//                if (!empty($snapshot)){
+//                    for ($i=0;$i<count($snapshot);$i++){
+//                        $info = CommodityInfo::find($snapshot[$i]->commodity_id);
+//                        $info->sales += $snapshot[$i]->count;
+//                        $info->save();
+//                        $commodity = Commodity::find($snapshot[$i]->product_id);
+//                        $commodity->stock -= $snapshot[$i]->count;
+//                        $commodity->save();
+//                    }
+//                }
                 if ($order->save()){
                     return 'SUCCESS';
                 }
             }
 
-        }else{
-            $filehandle = fopen('log.txt','a+');
-            fwrite($filehandle,var_export($data,true));
-            fclose($filehandle);
-            $filehandle2 = fopen('logs.txt','a+');
-            fwrite($filehandle2,var_export($sign,true));
-            fclose($filehandle2);
         }
         return 'ERROR';
     }
