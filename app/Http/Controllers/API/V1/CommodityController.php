@@ -89,7 +89,7 @@ class CommodityController extends Controller
         }
         if (!empty($commodities)){
             for ($i=0;$i<count($commodities);$i++){
-                $commodities[$i]->pictures = $commodities[$i]->pictures()->get();
+                $commodities[$i]->pictures = $commodities[$i]->pictures()->where('product_id','=',0)->get();
             }
         }
         return response()->json([
@@ -197,7 +197,7 @@ class CommodityController extends Controller
     public function getCommodityInfo($id)
     {
         $info = CommodityInfo::find($id);
-        $info->pictures = $info->pictures()->limit(6)->get();
+        $info->pictures = $info->pictures()->where('product_id','=',0)->get();
         if (empty($info)){
             return response()->json([
                 'code'=>'404',
