@@ -250,7 +250,7 @@ class UserController extends Controller
         if (!empty($workers)){
             for ($i=0;$i<count($workers);$i++){
                 $workers[$i]->apply = $workers[$i]->apply()->first();
-                $workers[$i]->count = DeliveryAddress::where('worker','=',$workers[$i]->id)->count();
+                $workers[$i]->count = DeliveryAddress::where('worker_id','=',$workers[$i]->id)->count();
             }
         }
         return response()->json([
