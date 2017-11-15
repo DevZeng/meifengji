@@ -245,6 +245,7 @@ class OrderController extends Controller
             ]);
         }else{
             $order->worker_id = $uid;
+            $order->state = 1;
             if ($order->save()){
                 Reserve::where([
                     'user_id'=>$uid,
