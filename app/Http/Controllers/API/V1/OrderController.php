@@ -70,7 +70,7 @@ class OrderController extends Controller
         if (!empty($reserves)){
             for ($i=0;$i<count($reserves);$i++){
                 $info = ApplyForm::where([
-                    'user_id'=>$reserves[$i]->worker
+                    'user_id'=>$reserves[$i]->worker_id
                 ])->first();
                 $reserves[$i]->worker = empty($info)?'':$info->name;
             }
