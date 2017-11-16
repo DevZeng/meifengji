@@ -82,6 +82,11 @@ class UserController extends Controller
             'user_id'=>$uid,
             'state'=>$state
         ])->limit($limit)->offset(($page-1)*$limit)->orderBy('id','DESC')->get();
+        if (!empty($reserves)){
+            for ($i=0;$i<count($reserves);$i++){
+                $reserves[$i]->worker = ApplyForm::where('user_id','=',$reserves[$i]->worker_id)->first();
+            }
+        }
         return response()->json([
             'code'=>'200',
             'data'=>$reserves
