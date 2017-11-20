@@ -27,7 +27,7 @@ class CommodityController extends Controller
         }
         if (!empty($commodities)){
             for ($i=0;$i<count($commodities);$i++){
-                $commodities[$i]->price = $commodities[$i]->commodities()->orderBy('price','asc')->pluck('price')->first();
+//                $commodities[$i]->price = $commodities[$i]->commodities()->orderBy('price','asc')->pluck('price')->first();
                 $commodities[$i]->picture = $commodities[$i]->pictures()->pluck('thumb_url')->first();
             }
         }
