@@ -16,6 +16,7 @@ class CreateCommodityInfosTable extends Migration
         Schema::create('commodity_infos', function (Blueprint $table) {
             $table->increments('id');
             $table->string('title');
+            $table->string('unit')->nullable();
             $table->string('description',1000);
             $table->text('content');
             $table->unsignedInteger('sales')->default(0);

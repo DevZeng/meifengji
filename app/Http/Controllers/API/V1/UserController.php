@@ -54,7 +54,7 @@ class UserController extends Controller
             } else {
                 $token = createNoncestr(16);
                 setUserToken($token,$user->id);
-                $count = ApplyForm::where('user_id','=',$user->id)->count();
+                $count = ApplyForm::where('user_id','=',$user->id)->where('state','=','0')->count();
                 return response()->json([
                     'code'=>'200',
                     'data'=>[
