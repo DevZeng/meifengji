@@ -31,6 +31,7 @@ class OrderController extends Controller
         $address->name = Input::get('name');
         $address->number = Input::get('number');
         $address->address = Input::get('address');
+        $address->formId = Input::get('formId');
 //        $address->latitude = Input::get('latitude');
 //        $address->longitude = Input::get('longitude');
         $address->city = Input::get('city');
