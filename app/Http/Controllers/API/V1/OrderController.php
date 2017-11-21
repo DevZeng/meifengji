@@ -60,10 +60,10 @@ class OrderController extends Controller
         $state = Input::get('state');
         if (!empty($state)){
             $reserves = DeliveryAddress::where([
-                'state'=>$state
+                'state'=>($state-1)
             ])->limit($limit)->offset(($page-1)*$limit)->orderBy('id','DESC')->get();
             $count = DeliveryAddress::where([
-                'state'=>$state
+                'state'=>($state-1)
             ])->limit($limit)->offset(($page-1)*$limit)->count();
         }else{
             $reserves = DeliveryAddress::limit($limit)->offset(($page-1)*$limit)->orderBy('id','DESC')->get();
