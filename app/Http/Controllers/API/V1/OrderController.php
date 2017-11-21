@@ -288,10 +288,10 @@ class OrderController extends Controller
                             "value"=>date('Y-m-d H:i:s',time())
                         ],
                         "keyword2"=>[
-                            "value"=>$apply->name
+                            "value"=>empty($apply)?'':$apply->name
                         ],
                         "keyword3"=>[
-                            "value"=>$apply->phone
+                            "value"=>empty($apply)?'':$apply->phone
                         ]
                     ]
                 ];
