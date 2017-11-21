@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\API\V1;
 
 use App\Libraries\AliyunSMS;
+use App\Libraries\WxNotify;
 use App\Libraries\WxPay;
 use App\Models\ApplyForm;
 use App\Models\Attribute;
@@ -81,6 +82,25 @@ class OrderController extends Controller
             'count'=>$count,
             'data'=>$reserves
         ]);
+    }
+    public function finishReserve($id)
+    {
+        $uid = getUserToken(Input::get('token'));
+        $order = DeliveryAddress::find($id);
+        if ($order->user_id != $uid){
+            return response()->json([
+                'code'=>'403',
+                'msg'=>'无权操作！'
+            ]);
+        }
+        $comment = Input::get('comment');
+        $order->state = 2;
+        $order->comment = empty($comment)?'':$comment;
+        if ($order->save()){
+            return response()->json([
+                'code'=>'200'
+            ]);
+        }
     }
     public function makeOrder()
     {
@@ -235,6 +255,11 @@ class OrderController extends Controller
     {
         $uid = getUserToken(Input::get('token'));
         $order = DeliveryAddress::find($id);
+        $user = WeChatUser::find($order->user_id);
+        $apply = ApplyForm::where([
+            'user_id'=>$order->worker_id,
+            'state'=>'1'
+        ])->first();
         if ($order->worker_id!=0){
             Reserve::where([
                 'user_id'=>$uid,
@@ -252,6 +277,26 @@ class OrderController extends Controller
                     'user_id'=>$uid,
                     'reserve_id'=>$id
                 ])->delete();
+                $wxnotify = new WxNotify(config('wxxcx.app_id'),config('wxxcx.app_secret'));
+                $data = [
+                    "touser"=>$user->open_id,
+                    "template_id"=>config('wxxcx.template_id'),
+                    "form_id"=> $order->formId,
+                    "page"=>"pages/index/index",
+                    "data"=>[
+                        "keyword1"=>[
+                            "value"=>date('Y-m-d H:i:s',time())
+                        ],
+                        "keyword2"=>[
+                            "value"=>$apply->name
+                        ],
+                        "keyword3"=>[
+                            "value"=>$apply->phone
+                        ]
+                    ]
+                ];
+                $wxnotify->setAccessToken();
+                $data = $wxnotify->send(json_encode($data));
                 return response()->json([
                     'code'=>'200'
                 ]);
@@ -261,9 +306,6 @@ class OrderController extends Controller
     public function payNotify(Request $request)
     {
         $data = $request->getContent();
-        $handle = fopen('log.txt');
-        fwrite($handle,var_export($data,true));
-        fclose($handle);
         $wx = WxPay::xmlToArray($data);
         $wspay = new WxPay(config('wxxcx.app_id'),config('wxxcx.mch_id'),config('wxxcx.api_key'),$wx['openid']);
         $data = [

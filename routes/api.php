@@ -32,4 +32,5 @@ Route::group(['prefix'=>'v1'],function (){
     Route::get('article','API\V1\SystemController@getArticle');
     Route::post('code','API\V1\SystemController@sendCode');
     Route::post('pay/notify','API\V1\OrderController@payNotify');
+    Route::post('finish/reserve/{id}','API\V1\OrderController@finishReserve');
 });
