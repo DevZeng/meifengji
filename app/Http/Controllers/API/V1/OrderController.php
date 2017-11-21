@@ -257,7 +257,7 @@ class OrderController extends Controller
         $order = DeliveryAddress::find($id);
         $user = WeChatUser::find($order->user_id);
         $apply = ApplyForm::where([
-            'user_id'=>$order->worker_id,
+            'user_id'=>$uid,
             'state'=>'1'
         ])->first();
         if ($order->worker_id!=0){
