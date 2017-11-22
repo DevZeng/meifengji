@@ -14,6 +14,7 @@ use App\Models\Express;
 use App\Models\Order;
 use App\Models\OrderSnapshot;
 use App\Models\Reserve;
+use App\Models\StoreApp;
 use App\Models\WeChatUser;
 use function GuzzleHttp\Psr7\uri_for;
 use Illuminate\Http\Request;
@@ -27,12 +28,19 @@ class OrderController extends Controller
     public function reserve()
     {
         $uid = getUserToken(Input::get('token'));
+        $app_id = Input::get('app_id');
         $address = new DeliveryAddress();
         $address->user_id = $uid;
         $address->name = Input::get('name');
         $address->number = Input::get('number');
         $address->address = Input::get('address');
         $address->formId = Input::get('formId');
+        if ($app_id){
+            $app = StoreApp::where('app_id','=',$app_id)->first();
+            if (!empty($app)){
+                $address->app_id = $app->id;
+            }
+        }
 //        $address->latitude = Input::get('latitude');
 //        $address->longitude = Input::get('longitude');
         $address->city = Input::get('city');
@@ -277,10 +285,18 @@ class OrderController extends Controller
                     'user_id'=>$uid,
                     'reserve_id'=>$id
                 ])->delete();
-                $wxnotify = new WxNotify(config('wxxcx.app_id'),config('wxxcx.app_secret'));
+                if ($order->app_id!=0){
+                    $app = StoreApp::find($order->app_id);
+                    $wxnotify = new WxNotify($app->app_id,$app->secret);
+                    $template_id = $app->template_id;
+                }else{
+                    $wxnotify = new WxNotify(config('wxxcx.app_id'),config('wxxcx.app_secret'));
+                    $template_id = config('wxxcx.template_id')
+                }
+
                 $data = [
                     "touser"=>$user->open_id,
-                    "template_id"=>config('wxxcx.template_id'),
+                    "template_id"=>$template_id,
                     "form_id"=> $order->formId,
                     "page"=>"pages/index/index",
                     "data"=>[
