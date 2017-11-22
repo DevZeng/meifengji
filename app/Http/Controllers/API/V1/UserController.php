@@ -28,7 +28,7 @@ class UserController extends Controller
     {
         $app_id = $request->get('app_id');
         $app = StoreApp::where('app_id','=',$app_id)->first();
-        $wxxcx = new Wxxcx($app->app_id,$app->secert);
+        $wxxcx = new Wxxcx($app->app_id,$app->secret);
         $sessionKey = $wxxcx->getSessionKey($request->get('code'));
         if ($sessionKey) {
             $userinfo = $wxxcx->decode($request->get('encryptedData'), $request->get('iv'));
