@@ -11,17 +11,71 @@ use App\Models\DeliveryAddress;
 use App\Models\Order;
 use App\Models\OrderSnapshot;
 use App\Models\Reserve;
+use App\Models\StoreApp;
 use App\Models\WeChatUser;
 use App\User;
 use function GuzzleHttp\Psr7\uri_for;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
+use Illuminate\Session\Store;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Input;
 
 class UserController extends Controller
 {
     //
+    public function storeLogin(Request $request)
+    {
+        $app_id = $request->get('app_id');
+        $app = StoreApp::where('app_id','=',$app_id)->first();
+        $wxxcx = new Wxxcx($app->app_id,$app->secert);
+        $sessionKey = $wxxcx->getSessionKey($request->get('code'));
+        if ($sessionKey) {
+            $userinfo = $wxxcx->decode($request->get('encryptedData'), $request->get('iv'));
+            $userinfo = json_decode($userinfo);
+            $user = WeChatUser::where('open_id','=',$userinfo->openId)->first();
+            if (empty($user)) {
+                $user = new WeChatUser();
+                $user->nickname = $userinfo->nickName;
+                $user->gender = $userinfo->gender;
+                $user->city = $userinfo->city;
+                $user->province = $userinfo->province;
+                $user->avatarUrl = $userinfo->avatarUrl;
+                $user->open_id = $userinfo->openId;
+                if ($user->save()){
+                    $token = createNoncestr(16);
+                    setUserToken($token,$user->id);
+                    return response()->json([
+                        'code'=>'200',
+                        'data'=>[
+                            'worker'=>$user->worker,
+                            'apply'=>0,
+                            'token'=>$token,
+                            'enable'=>$user->enable
+                        ]
+                    ]);
+                }
+            } else {
+                $token = createNoncestr(16);
+                setUserToken($token,$user->id);
+                $count = ApplyForm::where('user_id','=',$user->id)->where('state','=','0')->count();
+                return response()->json([
+                    'code'=>'200',
+                    'data'=>[
+                        'worker'=>$user->worker,
+                        'apply'=>$count,
+                        'token'=>$token,
+                        'enable'=>$user->enable
+                    ]
+                ]);
+            }
+        }
+        return response()->json([
+            'code'=>'400',
+            'msg'=>'error',
+            'data'=>$wxxcx
+        ]);
+    }
     public function login(Request $request)
     {
         $wxxcx = new Wxxcx(\config('wxxcx.app_id'),\config('wxxcx.app_secret'));
