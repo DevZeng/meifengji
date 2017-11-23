@@ -291,7 +291,7 @@ class OrderController extends Controller
                     $template_id = $app->template_id;
                 }else{
                     $wxnotify = new WxNotify(config('wxxcx.app_id'),config('wxxcx.app_secret'));
-                    $template_id = config('wxxcx.template_id')
+                    $template_id = config('wxxcx.template_id');
                 }
 
                 $data = [
