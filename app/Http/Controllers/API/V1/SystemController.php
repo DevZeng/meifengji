@@ -65,6 +65,7 @@ class SystemController extends Controller
             ]);
         }
         $file = $request->file('image');
+//        dd($file);
         $name = $file->getClientOriginalName();
         $name = explode('.',$name);
         if (count($name)!=2){

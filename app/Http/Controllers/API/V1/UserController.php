@@ -11,6 +11,8 @@ use App\Models\DeliveryAddress;
 use App\Models\Order;
 use App\Models\OrderSnapshot;
 use App\Models\Reserve;
+use App\Models\Role;
+use App\Models\RoleUser;
 use App\Models\StoreApp;
 use App\Models\WeChatUser;
 use App\User;
@@ -197,8 +199,13 @@ class UserController extends Controller
         $username = Input::get('username');
         $password = Input::get('password');
         if (Auth::attempt(['username'=>$username,'password'=>$password],true)){
+            $role_id = RoleUser::where('user_id','=',Auth::id())->pluck('role_id')->first();
+            $role = Role::find($role_id);
             return response()->json([
-                'code'=>'200'
+                'code'=>'200',
+                'data'=>[
+                    'role'=>$role->name
+                ]
             ]);
         }else{
             return response()->json([
@@ -326,6 +333,66 @@ class UserController extends Controller
         $worker->save();
         return response()->json([
             'code'=>'200'
+        ]);
+    }
+    public function addUser()
+    {
+        $user = new User();
+        $user->username = Input::get('username');
+        $user->password = bcrypt(Input::get('password'));
+        $user->name = Input::get('name');
+        if ($user->save()){
+            $role = new RoleUser();
+            $role->user_id = $user->id;
+            $role->role_id = 2;
+            $role->save();
+            $app = new StoreApp();
+            $app->user_id = $user->id;
+            $app->name = Input::get('name');
+            $app->app_id = Input::get('app_id');
+            $app->secret = Input::get('secret');
+            $app->template_id = Input::get('template_id');
+            if ($app->save()){
+                return response()->json([
+                    'code'=>'200'
+                ]);
+            }
+        }
+    }
+    public function delApp($id)
+    {
+        $app = StoreApp::find($id);
+        $user = User::find($app->user_id);
+        $user->delete();
+        RoleUser::where('user_id','=',$app->user_id)->delete();
+        if ($app->delete()){
+            return response()->json([
+                'code'=>'200'
+            ]);
+        }
+    }
+    public function listApps()
+    {
+        $page = Input::get('page',1);
+        $limit = Input::get('limit',10);
+        $appsDb = StoreApp::where('state','=',1);
+        $name = Input::get('name');
+        $app_id = Input::get('app_id');
+        if ($name){
+            $appsDb->where('name','like','%'.$name.'%');
+        }
+        if ($app_id){
+            $appsDb->where('app_id','=',$app_id);
+        }
+        $apps = $appsDb->limit($limit)->offset(($page-1)*$limit)->get();
+        if (empty($apps)){
+            for ($i=0;$i<count($apps);$i++){}
+        }
+        $count = $appsDb->count();
+        return response()->json([
+            'code'=>'200',
+            'count'=>$count,
+            'data'=>$apps
         ]);
     }
 }

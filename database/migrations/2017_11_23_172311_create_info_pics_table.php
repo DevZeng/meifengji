@@ -4,7 +4,7 @@ use Illuminate\Support\Facades\Schema;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Database\Migrations\Migration;
 
-class CreateStoreInfosTable extends Migration
+class CreateInfoPicsTable extends Migration
 {
     /**
      * Run the migrations.
@@ -13,15 +13,13 @@ class CreateStoreInfosTable extends Migration
      */
     public function up()
     {
-        Schema::create('store_infos', function (Blueprint $table) {
+        Schema::create('info_pics', function (Blueprint $table) {
             $table->increments('id');
-            $table->unsignedInteger('app_id');
-            $table->string('name');
-            $table->string('phone');
-            $table->string('address');
-            $table->text('detail');
-            $table->float('lat', 10,6);
-            $table->float('lng',10,6);
+            $table->unsignedInteger('info_id');
+            $table->string('url',1000);
+            $table->string('name',1000);
+            $table->string('thumb_url',1000);
+            $table->tinyInteger('type');
             $table->timestamps();
         });
     }
@@ -33,6 +31,6 @@ class CreateStoreInfosTable extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('store_infos');
+        Schema::dropIfExists('info_pics');
     }
 }

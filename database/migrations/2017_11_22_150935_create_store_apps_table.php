@@ -15,6 +15,7 @@ class CreateStoreAppsTable extends Migration
     {
         Schema::create('store_apps', function (Blueprint $table) {
             $table->increments('id');
+            $table->unsignedInteger('user_id');
             $table->string('name');
             $table->string('app_id');
             $table->string('secret');
