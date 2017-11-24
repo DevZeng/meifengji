@@ -4,6 +4,7 @@ namespace App\Http\Controllers\API\V1;
 
 use App\Libraries\Wxxcx;
 use App\Models\ApplyForm;
+use App\Models\Article;
 use App\Models\Attribute;
 use App\Models\Commodity;
 use App\Models\CommodityInfo;
@@ -398,15 +399,13 @@ class UserController extends Controller
     }
     public function test()
     {
-        $pictures = CommodityPicture::all();
-        for ($i=0;$i<count($pictures);$i++){
-            $url = $pictures[$i]->url;
-            $url = str_replace('http://xcx.gdmeika.com','https://xcx.xiashantown.cn',$url);
-            $pictures[$i]->url = $url;
-            $thumb = $pictures[$i]->thumb_url;
-            $thumb = str_replace('http://xcx.gdmeika.com','https://xcx.xiashantown.cn',$thumb);
-            $pictures[$i]->thumb_url = $thumb;
-            $pictures[$i]->save();
+        $articles = Article::all();
+        for ($i=0;$i<count($articles);$i++){
+            $content = $articles[$i]->content;
+            $content = str_replace('http://xcx.gdmeika.com','https://xcx.xiashantown.cn',$content);
+            $articles[$i]->content = $content;
+            $articles[$i]->save();
+
         }
     }
     public function test2()
