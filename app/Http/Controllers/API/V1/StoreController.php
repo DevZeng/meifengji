@@ -24,9 +24,9 @@ class StoreController extends Controller
             ]);
         }
         $store = $app->info()->first();
-        if (!empty($info)){
-            $info->pic = $info->pic()->where('type','=',1)->get();
-            $info->pic2 = $info->pic()->where('type','=',2)->get();
+        if (!empty($store)){
+            $store->pic = $store->pic()->where('type','=',1)->get();
+            $store->pic2 = $store->pic()->where('type','=',2)->get();
         }
         return response()->json([
             'code'=>'200',
