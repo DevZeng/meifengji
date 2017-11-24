@@ -397,28 +397,4 @@ class UserController extends Controller
             'data'=>$apps
         ]);
     }
-    public function test()
-    {
-        $articles = Article::all();
-        for ($i=0;$i<count($articles);$i++){
-            $content = $articles[$i]->content;
-            $content = str_replace('http://xcx.gdmeika.com','https://xcx.xiashantown.cn',$content);
-            $articles[$i]->content = $content;
-            $articles[$i]->save();
-
-        }
-    }
-    public function test2()
-    {
-        $infos = CommodityInfo::all();
-        for ($i=0;$i<count($infos);$i++){
-            $cover = $infos[$i]->cover;
-            if (!empty($cover)){
-                $cover = str_replace('http://xcx.gdmeika.com','https://xcx.xiashantown.cn',$cover);
-            }
-
-            $infos[$i]->cover = $cover;
-            $infos[$i]->save();
-        }
-    }
 }

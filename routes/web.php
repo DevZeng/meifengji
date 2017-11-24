@@ -14,8 +14,6 @@
 Route::get('/', function () {
     return view('welcome');
 });
-Route::get('test','API\V1\UserController@test');
-Route::get('test2','API\V1\UserController@test2');
 
 Route::group(['middleware'=>'cross'],function (){
     Route::post('login','API\V1\UserController@adminLogin');
