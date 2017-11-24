@@ -409,4 +409,14 @@ class UserController extends Controller
             $pictures[$i]->save();
         }
     }
+    public function test2()
+    {
+        $infos = CommodityInfo::all();
+        for ($i=0;$i<count($infos);$i++){
+            $content = $infos[$i]->content;
+            $content = str_replace('http://xcx.gdmeika.com','https://xcx.xiashantown.cn',$content);
+            $infos[$i]->content = $content;
+            $infos[$i]->save();
+        }
+    }
 }
