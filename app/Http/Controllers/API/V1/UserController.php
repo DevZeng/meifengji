@@ -340,6 +340,20 @@ class UserController extends Controller
     public function addUser()
     {
         $user = new User();
+        $count = User::where('username','=',Input::get('username'))->count();
+        if ($count!=0){
+            return response()->json([
+                'code'=>'400',
+                'msg'=>'该用户已存在！'
+            ]);
+        }
+        $app_count = StoreApp::where('name','=',Input::get('name'))->count();
+        if ($app_count!=0){
+            return response()->json([
+                'code'=>'400',
+                'msg'=>'该加盟商已存在！'
+            ]);
+        }
         $user->username = Input::get('username');
         $user->password = bcrypt(Input::get('password'));
         $user->name = Input::get('name');
