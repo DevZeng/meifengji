@@ -7,6 +7,7 @@ use App\Models\ApplyForm;
 use App\Models\Attribute;
 use App\Models\Commodity;
 use App\Models\CommodityInfo;
+use App\Models\CommodityPicture;
 use App\Models\DeliveryAddress;
 use App\Models\Order;
 use App\Models\OrderSnapshot;
@@ -394,5 +395,18 @@ class UserController extends Controller
             'count'=>$count,
             'data'=>$apps
         ]);
+    }
+    public function test()
+    {
+        $pictures = CommodityPicture::all();
+        for ($i=0;$i<count($pictures);$i++){
+            $url = $pictures[$i]->url;
+            $url = str_replace('http://xcx.gdmeika.com','https://xcx.xiashantown.cn',$url);
+            $pictures[$i]->url = $url;
+            $thumb = $pictures[$i]->thumb_url;
+            $thumb = str_replace('http://xcx.gdmeika.com','https://xcx.xiashantown.cn',$thumb);
+            $pictures[$i]->thumb_url = $thumb;
+            $pictures[$i]->save();
+        }
     }
 }
