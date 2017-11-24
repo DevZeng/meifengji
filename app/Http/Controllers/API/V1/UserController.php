@@ -388,7 +388,9 @@ class UserController extends Controller
         }
         $apps = $appsDb->limit($limit)->offset(($page-1)*$limit)->get();
         if (empty($apps)){
-            for ($i=0;$i<count($apps);$i++){}
+            for ($i=0;$i<count($apps);$i++){
+                $apps[$i]->user = User::find($apps[$i]->user_id);
+            }
         }
         $count = $appsDb->count();
         return response()->json([
