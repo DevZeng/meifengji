@@ -148,10 +148,10 @@ class SystemController extends Controller
             if ($data->success=='true'){
                 return true;
             }
-            dd($data);
+            return false;
         }
-        dd($data);
-//        return false;
+//        dd($data);
+        return false;
     }
 
     public function sendCode()
