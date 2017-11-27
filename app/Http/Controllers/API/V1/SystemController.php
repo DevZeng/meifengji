@@ -7,6 +7,7 @@ use App\Models\Advert;
 use App\Models\ApplyForm;
 use App\Models\Article;
 use App\Models\WeChatUser;
+use Illuminate\Support\Facades\DB;
 use Intervention\Image\Facades\Image;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
@@ -176,14 +177,16 @@ class SystemController extends Controller
         $page = Input::get('page',1);
         $limit = Input::get('limit',10);
         $state = Input::get('state');
+        $area = Input::get('area');
+        $DB = DB::table('apply_forms');
         if (isset($state)){
-            $applies = ApplyForm::where('state','=',$state)->limit($limit)->offset(($page-1))->get();
-            $count = ApplyForm::where('state','=',$state)->count();
-        }else{
-            $applies = ApplyForm::limit($limit)->offset(($page-1))->get();
-            $count = ApplyForm::count();
+            $DB->where('state','=',$state);
         }
-
+        if ($area){
+            $DB->where('city','like','%'.$area.'%');
+        }
+        $applies = $DB->limit($limit)->offset(($page-1)*$limit)->get();
+        $count = $DB->count();
         return response()->json([
             'code'=>'200',
             'count'=>$count,
