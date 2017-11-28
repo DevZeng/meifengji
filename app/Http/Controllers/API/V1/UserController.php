@@ -236,7 +236,13 @@ class UserController extends Controller
         }
 //        $lat = Input::get('lat');
 //        $lng = Input::get('lng');
-        $count = ApplyForm::where('phone','=',$phone)->orWhere('id_card','=',$id_card)->count();
+        $count = ApplyForm::where([
+            'phone'=>$phone,
+            'state'=>1
+        ])->orWhere([
+            'id_card'=>$id_card,
+            'state'=>1
+        ])->count();
         if ($count!=0){
             return response()->json([
                 'code'=>'400',
