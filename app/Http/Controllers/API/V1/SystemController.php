@@ -163,6 +163,7 @@ class SystemController extends Controller
             'msg'=>$code
         ];
         if ($this->sendSms($phone,\config('alisms.VerificationCode'),$data)){
+            setCode($phone,$code);
             return response()->json([
                 'code'=>'200'
             ]);
