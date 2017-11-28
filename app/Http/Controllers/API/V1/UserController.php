@@ -226,7 +226,7 @@ class UserController extends Controller
         $name = Input::get('name');
         $id_card = Input::get('id_card');
         $city = Input::get('city');
-        $sms = Input::get('sms');
+        $sms = Input::get('sns');
         $code = getCode($phone);
         if (empty($sms)){
             return response()->json([
