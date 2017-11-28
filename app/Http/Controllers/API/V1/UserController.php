@@ -242,13 +242,21 @@ class UserController extends Controller
         }
 //        $lat = Input::get('lat');
 //        $lng = Input::get('lng');
-        $count = ApplyForm::where('phone','=',$phone)->orWhere('id_card','=',$id_card)->where('state','=','1')->count();
+        $count = ApplyForm::where('phone','=',$phone)->where('state','=','1')->count();
+        $id_count = ApplyForm::where('id_card','=',$id_card)->where('state','=','1')->count();
         if ($count!=0){
             return response()->json([
                 'code'=>'400',
                 'msg'=>'手机号或证件号已被使用！'
             ]);
-        }else{
+        }
+        if ($id_count!=0){
+            return response()->json([
+                'code'=>'400',
+                'msg'=>'手机号或证件号已被使用！'
+            ]);
+        }
+
             $apply = new ApplyForm();
             $apply->user_id = $uid;
             $apply->phone = $phone;
@@ -269,7 +277,7 @@ class UserController extends Controller
                     'code'=>'200'
                 ]);
             }
-        }
+
     }
     public function getMyReserves()
     {
