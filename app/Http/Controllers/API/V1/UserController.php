@@ -228,7 +228,13 @@ class UserController extends Controller
         $city = Input::get('city');
         $sms = Input::get('sms');
         $code = getCode($phone);
-        if ($code!=$sms){
+        if (empty($sms)){
+            return response()->json([
+                'code'=>'400',
+                'msg'=>'请输入验证码！'
+            ]);
+        }
+        if ($sms!=$code){
             return response()->json([
                 'code'=>'400',
                 'msg'=>'验证码错误！'
