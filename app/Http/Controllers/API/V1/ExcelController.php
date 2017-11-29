@@ -37,8 +37,6 @@ class ExcelController extends Controller
                     $dbObj->where('state','=',$state-1);
                 }
                 if ($start){
-                    $start = date('Y-m-d H:i:s',$start);
-                    $end = date('Y-m-d H:i:s',$end);
                     $dbObj->whereBetween('created_at',[$start,$end]);
                 }
                 $data = $dbObj->get();
@@ -52,8 +50,6 @@ class ExcelController extends Controller
                     $dbObj->where('state','=',$state-1);
                 }
                 if ($start){
-                    $start = date('Y-m-d H:i:s',$start);
-                    $end = date('Y-m-d H:i:s',$end);
                     $dbObj->whereBetween('created_at',[$start,$end]);
                 }
                 $data = $dbObj->get();
@@ -67,8 +63,6 @@ class ExcelController extends Controller
                     $dbObj->where('enable','=',$state-1);
                 }
                 if ($start){
-                    $start = date('Y-m-d H:i:s',$start);
-                    $end = date('Y-m-d H:i:s',$end);
                     $dbObj->whereBetween('created_at',[$start,$end]);
                 }
                 $data = $dbObj->get();
