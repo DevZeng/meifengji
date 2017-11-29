@@ -53,5 +53,6 @@ Route::group(['middleware'=>'cross'],function (){
    Route::post('add/user','API\V1\UserController@addUser')->middleware('role:admin');
    Route::get('del/app/{id}','API\V1\UserController@delApp')->middleware('role:admin');
    Route::get('apps','API\V1\UserController@listApps')->middleware('role:admin');
+   Route::get('output','API\V1\ExcelController@Output')->middleware('role:admin');
     });
 });
