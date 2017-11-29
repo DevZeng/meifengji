@@ -277,7 +277,6 @@ class UserController extends Controller
                     'code'=>'200'
                 ]);
             }
-
     }
     public function getMyReserves()
     {
@@ -415,7 +414,7 @@ class UserController extends Controller
             $appsDb->where('app_id','=',$app_id);
         }
         $apps = $appsDb->limit($limit)->offset(($page-1)*$limit)->get();
-        if (empty($apps)){
+        if (!empty($apps)){
             for ($i=0;$i<count($apps);$i++){
                 $apps[$i]->user = User::find($apps[$i]->user_id);
             }
