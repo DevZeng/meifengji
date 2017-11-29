@@ -37,7 +37,7 @@ class ExcelController extends Controller
                     $dbObj->where('state','=',$state-1);
                 }
                 if ($start){
-                    $dbObj->whereBetween('created_at',[$start,$end]);
+                    $dbObj->where('created_at','>',$start)->where('created_at','<',$end);
                 }
                 $data = $dbObj->get();
                 $data = $this->formatReverse($data);
@@ -50,7 +50,7 @@ class ExcelController extends Controller
                     $dbObj->where('state','=',$state-1);
                 }
                 if ($start){
-                    $dbObj->whereBetween('created_at',[$start,$end]);
+                    $dbObj->where('created_at','>',$start)->where('created_at','<',$end);
                 }
                 $data = $dbObj->get();
                 $data = $this->formatOrder($data);
@@ -63,7 +63,7 @@ class ExcelController extends Controller
                     $dbObj->where('enable','=',$state-1);
                 }
                 if ($start){
-                    $dbObj->whereBetween('created_at',[$start,$end]);
+                    $dbObj->where('created_at','>',$start)->where('created_at','<',$end);
                 }
                 $data = $dbObj->get();
                 $data = $this->formatWorker($data);
