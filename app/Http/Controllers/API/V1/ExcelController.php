@@ -70,16 +70,16 @@ class ExcelController extends Controller
 //                dd($data);
                 break;
         }
-//        $final = array_merge($origin,$data);
-        return response()->json([
-            'code'=>200,
-            'data'=>$data
-        ]);
+        $final = array_merge($origin,$data);
+//        return response()->json([
+//            'code'=>200,
+//            'data'=>$data
+//        ]);
         \Maatwebsite\Excel\Facades\Excel::create($name,function ($excel) use ($final){
             $excel->sheet('data',function ($sheet) use ($final){
                 $sheet->rows($final);
             });
-        })->export('xls');
+        })->export('xlsx');
     }
     public function formatReverse($reverses)
     {
