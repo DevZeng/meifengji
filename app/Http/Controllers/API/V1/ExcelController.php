@@ -79,7 +79,7 @@ class ExcelController extends Controller
             $excel->sheet('data',function ($sheet) use ($final){
                 $sheet->rows($final);
             });
-        })->export('xlsx');
+        })->export('xls');
     }
     public function formatReverse($reverses)
     {
