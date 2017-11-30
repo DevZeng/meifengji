@@ -153,6 +153,7 @@ class ExcelController extends Controller
                     (string)$workers[$i]->created_at,
                     (string)$state[$workers[$i]->enable],
                 ];
+                var_dump($swap);
                 array_push($ret_arr,$swap);
             }
         }
