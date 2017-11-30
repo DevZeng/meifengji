@@ -76,8 +76,8 @@ class ExcelController extends Controller
 //            'data'=>$data
 //        ]);
         \Maatwebsite\Excel\Facades\Excel::create($name,function ($excel) use ($final){
-            $excel->sheet('data',function ($sheet) use ($final){
-                $sheet->rows($final);
+            $excel->sheet('sheet1',function ($sheet) use ($final){
+                $sheet->setValue($final);
             });
         })->export('xls');
     }
