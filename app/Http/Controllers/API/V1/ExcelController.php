@@ -98,7 +98,7 @@ class ExcelController extends Controller
                 }
 
                 $swap = [
-                    (string)$reverses[$i]->created_at,
+                    date('Y-m-d H:i:s',strtotime($reverses[$i]->created_at)),
                     (string)$reverses[$i]->name,
                     (string)$reverses[$i]->number,
                     (string)$reverses[$i]->address,
@@ -125,7 +125,7 @@ class ExcelController extends Controller
                     }
                 }
                 $swap = [
-                    (string)$orders[$i]->created_at,
+                    date('Y-m-d H:i:s',strtotime($orders[$i]->created_at)),
                     (string)$orders[$i]->name,
                     (string)$orders[$i]->phone,
                     (string)$commodity,
@@ -154,7 +154,7 @@ class ExcelController extends Controller
                     empty($apply)?"":(string)$apply->phone,
                     (string)$d_count,
                     empty($apply)?"":(string)$apply->city,
-                    (string)$workers[$i]->created_at,
+                    date('Y-m-d H:i:s',strtotime($workers[$i]->created_at)),
                     (string)$state[$workers[$i]->enable],
                 ];
                 array_push($ret_arr,$swap);
