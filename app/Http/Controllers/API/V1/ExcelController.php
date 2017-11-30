@@ -141,15 +141,15 @@ class ExcelController extends Controller
         $state = ['停用','正常使用'];
         if (!empty($workers)){
             $count = count($workers);
-            dd($count);
+//            dd($count);
             for ($i=0;$i<$count;$i++){
                 $apply = ApplyForm::where('user_id','=',$workers[$i]->id)->where('state','=',1)->first();
                 $count = DeliveryAddress::where('worker_id','=',$workers[$i]->id)->count();
                 $swap = [
-                    (string)$apply->name,
-                    (string)$apply->phone,
+                    empty($apply)?"":(string)$apply->name,
+                    empty($apply)?"":(string)$apply->phone,
                     (string)$count,
-                    (string)$apply->city,
+                    empty($apply)?"":(string)$apply->city,
                     (string)$workers[$i]->created_at,
                     (string)$state[$workers[$i]->enable],
                 ];
