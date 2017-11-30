@@ -71,10 +71,10 @@ class ExcelController extends Controller
                 break;
         }
         $final = array_merge($origin,$data);
-//        return response()->json([
-//            'code'=>200,
-//            'data'=>$data
-//        ]);
+        return response()->json([
+            'code'=>200,
+            'data'=>$final
+        ]);
         \Maatwebsite\Excel\Facades\Excel::create($name,function ($excel) use ($final){
             $excel->sheet('sheet1',function ($sheet) use ($final){
                 $sheet->rows($final);
