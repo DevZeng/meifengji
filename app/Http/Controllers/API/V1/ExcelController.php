@@ -61,7 +61,6 @@ class ExcelController extends Controller
                 $name = '师傅列表';
                 if ($state){
                     $dbObj->where('enable','=',$state-1);
-                    dd($state);
                 }
                 if ($start){
                     $dbObj->where('created_at','>',$start)->where('created_at','<',$end);
