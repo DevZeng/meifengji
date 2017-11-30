@@ -420,7 +420,7 @@ class UserController extends Controller
     {
         $page = Input::get('page',1);
         $limit = Input::get('limit',10);
-        $appsDb = StoreApp::where('state','=',1);
+        $appsDb = DB::table('store_apps');
         $name = Input::get('name');
         $app_id = Input::get('app_id');
         if ($name){
