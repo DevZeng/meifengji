@@ -391,10 +391,26 @@ class UserController extends Controller
     public function delApp($id)
     {
         $app = StoreApp::find($id);
+        $state = $app->state;
+        $app->state = ($state == 0)?1:0;
+//        $user = User::find($app->user_id);
+//        $user->delete();
+//        RoleUser::where('user_id','=',$app->user_id)->delete();
+        if ($app->save()){
+            return response()->json([
+                'code'=>'200'
+            ]);
+        }
+    }
+    public function modifyPassword($id)
+    {
+        $app = StoreApp::find($id);
         $user = User::find($app->user_id);
-        $user->delete();
-        RoleUser::where('user_id','=',$app->user_id)->delete();
-        if ($app->delete()){
+        $password = Input::get('password');
+        if (!empty($password)){
+            $user->password = bcrypt($password);
+        }
+        if ($user->save()){
             return response()->json([
                 'code'=>'200'
             ]);
