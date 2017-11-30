@@ -91,12 +91,12 @@ class ExcelController extends Controller
                 }
 
                 $swap = [
-                    $reverses[$i]->created_at,
-                    $reverses[$i]->name,
-                    $reverses[$i]->number,
-                    $reverses[$i]->address,
-                    $apply,
-                    $state[$reverses[$i]->state]
+                    (string)$reverses[$i]->created_at,
+                    (string)$reverses[$i]->name,
+                    (string)$reverses[$i]->number,
+                    (string)$reverses[$i]->address,
+                    (string)$apply,
+                    (string)$state[$reverses[$i]->state]
                 ];
                 array_push($ret_arr,$swap);
             }
@@ -118,13 +118,13 @@ class ExcelController extends Controller
                     }
                 }
                 $swap = [
-                    $orders[$i]->created_at,
-                    $orders[$i]->name,
-                    $orders[$i]->phone,
-                    $commodity,
-                    $orders[$i]->price,
-                    $orders[$i]->address,
-                    $state[$orders[$i]->state]
+                    (string)$orders[$i]->created_at,
+                    (string)$orders[$i]->name,
+                    (string)$orders[$i]->phone,
+                    (string)$commodity,
+                    (string)$orders[$i]->price,
+                    (string)$orders[$i]->address,
+                    (string)$state[$orders[$i]->state]
                 ];
                 array_push($ret_arr,$swap);
             }
@@ -141,12 +141,12 @@ class ExcelController extends Controller
                 $apply = ApplyForm::where('user_id','=',$workers[$i]->id)->where('state','=',1)->first();
                 $count = DeliveryAddress::where('worker_id','=',$workers[$i]->id)->count();
                 $swap = [
-                    $apply->name,
-                    $apply->phone,
-                    $count,
-                    $apply->city,
-                    $workers[$i]->created_at,
-                    $state[$workers[$i]->enable],
+                    (string)$apply->name,
+                    (string)$apply->phone,
+                    (string)$count,
+                    (string)$apply->city,
+                    (string)$workers[$i]->created_at,
+                    (string)$state[$workers[$i]->enable],
                 ];
                 array_push($ret_arr,$swap);
             }
