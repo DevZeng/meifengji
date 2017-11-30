@@ -37,6 +37,8 @@ class ExcelController extends Controller
                     $dbObj->where('state','=',$state-1);
                 }
                 if ($start){
+                    $start = date('Y-m-d H:i:s',strtotime($start));
+                    $end = date('Y-m-d H:i:s',strtotime($end));
                     $dbObj->where('created_at','>',$start)->where('created_at','<',$end);
                 }
                 $data = $dbObj->get();
@@ -50,6 +52,8 @@ class ExcelController extends Controller
                     $dbObj->where('state','=',$state-1);
                 }
                 if ($start){
+                    $start = date('Y-m-d H:i:s',strtotime($start));
+                    $end = date('Y-m-d H:i:s',strtotime($end));
                     $dbObj->where('created_at','>',$start)->where('created_at','<',$end);
                 }
                 $data = $dbObj->get();
@@ -63,6 +67,8 @@ class ExcelController extends Controller
                     $dbObj->where('enable','=',$state-1);
                 }
                 if ($start){
+                    $start = date('Y-m-d H:i:s',strtotime($start));
+                    $end = date('Y-m-d H:i:s',strtotime($end));
                     $dbObj->where('created_at','>',$start)->where('created_at','<',$end);
                 }
                 $data = $dbObj->get();
