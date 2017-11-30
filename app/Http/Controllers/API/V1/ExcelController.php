@@ -143,6 +143,7 @@ class ExcelController extends Controller
             $count = count($workers);
 //            dd($count);
             for ($i=0;$i<$count;$i++){
+                echo $i;
                 $apply = ApplyForm::where('user_id','=',$workers[$i]->id)->where('state','=',1)->first();
                 $count = DeliveryAddress::where('worker_id','=',$workers[$i]->id)->count();
                 $swap = [
@@ -153,7 +154,6 @@ class ExcelController extends Controller
                     (string)$workers[$i]->created_at,
                     (string)$state[$workers[$i]->enable],
                 ];
-                var_dump($swap);
                 array_push($ret_arr,$swap);
             }
         }
