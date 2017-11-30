@@ -253,7 +253,7 @@ return array(
             | Apply strict comparison when testing for null values in the array
             |--------------------------------------------------------------------------
             */
-            'strictNullComparison' => false
+            'strictNullComparison' => true
         ],
 
         /*
