@@ -69,6 +69,7 @@ class ExcelController extends Controller
                 if ($start){
                     $start = date('Y-m-d H:i:s',strtotime($start));
                     $end = date('Y-m-d H:i:s',strtotime($end));
+                    dd($start);
                     $dbObj->where('created_at','>',$start)->where('created_at','<',$end);
                 }
                 $data = $dbObj->get();
