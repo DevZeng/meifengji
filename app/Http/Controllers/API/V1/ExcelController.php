@@ -71,10 +71,10 @@ class ExcelController extends Controller
                 break;
         }
         $final = array_merge($origin,$data);
-        return response()->json([
-            'code'=>200,
-            'data'=>$final
-        ]);
+//        return response()->json([
+//            'code'=>200,
+//            'data'=>$final
+//        ]);
         \Maatwebsite\Excel\Facades\Excel::create($name,function ($excel) use ($final){
             $excel->sheet('sheet1',function ($sheet) use ($final){
                 $count = count($final);
@@ -82,7 +82,7 @@ class ExcelController extends Controller
                     $sheet->row($j+1,$final[$j]);
                 }
             });
-        })->export('xls');
+        })->export('xlsx');
     }
     public function formatReverse($reverses)
     {
