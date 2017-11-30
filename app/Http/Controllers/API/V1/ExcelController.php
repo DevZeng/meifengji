@@ -71,15 +71,15 @@ class ExcelController extends Controller
                 break;
         }
         $final = array_merge($origin,$data);
-//        return response()->json([
-//            'code'=>200,
-//            'data'=>$final
-//        ]);
+        return response()->json([
+            'code'=>200,
+            'data'=>$final
+        ]);
         \Maatwebsite\Excel\Facades\Excel::create($name,function ($excel) use ($final){
             $excel->sheet('data',function ($sheet) use ($final){
                 $sheet->rows($final);
             });
-        })->export('xlsx');
+        })->export('xls');
     }
     public function formatReverse($reverses)
     {
