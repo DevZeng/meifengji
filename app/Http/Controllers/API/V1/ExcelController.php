@@ -66,7 +66,7 @@ class ExcelController extends Controller
                     $dbObj->where('created_at','>',$start)->where('created_at','<',$end);
                 }
                 $data = $dbObj->get();
-                $data = $this->formatWorker($data);
+//                $data = $this->formatWorker($data);
 //                dd($data);
                 break;
         }
