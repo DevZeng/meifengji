@@ -14,7 +14,7 @@
 Route::get('/', function () {
     return view('welcome');
 });
-
+Route::get('output','API\V1\ExcelController@Output');
 Route::group(['middleware'=>'cross'],function (){
     Route::post('login','API\V1\UserController@adminLogin');
     Route::get('workers','API\V1\UserController@getWorkers');
@@ -53,6 +53,6 @@ Route::group(['middleware'=>'cross'],function (){
    Route::post('add/user','API\V1\UserController@addUser')->middleware('role:admin');
    Route::get('del/app/{id}','API\V1\UserController@delApp')->middleware('role:admin');
    Route::get('apps','API\V1\UserController@listApps')->middleware('role:admin');
-   Route::get('output','API\V1\ExcelController@Output')->middleware('role:admin');
+//   Route::get('output','API\V1\ExcelController@Output')->middleware('role:admin');
     });
 });
