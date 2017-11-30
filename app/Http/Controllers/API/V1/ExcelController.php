@@ -141,6 +141,7 @@ class ExcelController extends Controller
         $state = ['停用','正常使用'];
         if (!empty($workers)){
             $count = count($workers);
+            dd($count);
             for ($i=0;$i<$count;$i++){
                 $apply = ApplyForm::where('user_id','=',$workers[$i]->id)->where('state','=',1)->first();
                 $count = DeliveryAddress::where('worker_id','=',$workers[$i]->id)->count();
