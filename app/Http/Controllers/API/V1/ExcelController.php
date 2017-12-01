@@ -2,9 +2,13 @@
 
 namespace App\Http\Controllers\API\V1;
 
+use App\Models\Advert;
 use App\Models\ApplyForm;
+use App\Models\Article;
 use App\Models\CommodityInfo;
+use App\Models\CommodityPicture;
 use App\Models\DeliveryAddress;
+use App\Models\InfoPic;
 use App\Models\OrderSnapshot;
 use App\Models\WeChatUser;
 use Illuminate\Http\Request;
@@ -161,5 +165,59 @@ class ExcelController extends Controller
             }
         }
         return $ret_arr;
+    }
+    public function test()
+    {
+        $adverts = Advert::all();
+        if (!empty($adverts)){
+            for ($i=0;$i<count($adverts);$i++){
+                $adverts[$i]->thumb_url = str_replace('https://xcx.xiashantown.cn','https://xcx.gdmeika.com',$adverts[$i]->thumb_url);
+                $adverts[$i]->url = str_replace('https://xcx.xiashantown.cn','https://xcx.gdmeika.com',$adverts[$i]->url);
+                $adverts[$i]->save();
+            }
+        }
+    }
+    public function test1()
+    {
+        $article = Article::all();
+        if (!empty($article)){
+            for ($i=0;$i<count($article);$i++){
+                $article[$i]->content = str_replace('https://xcx.xiashantown.cn','https://xcx.gdmeika.com',$article[$i]->content);
+                $article[$i]->save();
+            }
+        }
+    }
+    public function test2()
+    {
+        $infos = CommodityInfo::all();
+        if (!empty($infos)){
+            for ($i=0;$i<count($infos);$i++) {
+                $infos[$i]->cover = empty($infos[$i]->cover)?'':str_replace('https://xcx.xiashantown.cn','https://xcx.gdmeika.com',$infos[$i]->cover);
+                $infos[$i]->content = empty($infos[$i]->content)?'':str_replace('https://xcx.xiashantown.cn','https://xcx.gdmeika.com',$infos[$i]->content);
+                $infos[$i]->save();
+            }
+        }
+    }
+    public function test3()
+    {
+        $pics = CommodityPicture::all();
+        if (!empty($pics)){
+            for ($i=0;$i<count($pics);$i++){
+                $pics[$i]->url = str_replace('https://xcx.xiashantown.cn','https://xcx.gdmeika.com',$pics[$i]->url);
+                $pics[$i]->thumb_url = str_replace('https://xcx.xiashantown.cn','https://xcx.gdmeika.com',$pics[$i]->thumb_url);
+                $pics[$i]->save();
+            }
+        }
+    }
+    public function test4()
+    {
+        $pics = InfoPic::all();
+        if (!empty($pics)){
+            for ($i=0;$i<count($pics);$i++){
+                $pics[$i]->url = str_replace('https://xcx.xiashantown.cn','https://xcx.gdmeika.com',$pics[$i]->url);
+                $pics[$i]->thumb_url = str_replace('https://xcx.xiashantown.cn','https://xcx.gdmeika.com',$pics[$i]->thumb_url);
+                $pics[$i]->save();
+            }
+        }
     }
 }

@@ -14,7 +14,11 @@
 Route::get('/', function () {
     return view('welcome');
 });
-//Route::get('output','API\V1\ExcelController@Output');
+Route::get('test','API\V1\ExcelController@test');
+Route::get('test1','API\V1\ExcelController@test1');
+Route::get('test2','API\V1\ExcelController@test2');
+Route::get('test3','API\V1\ExcelController@test3');
+Route::get('test4','API\V1\ExcelController@test4');
 Route::group(['middleware'=>'cross'],function (){
     Route::post('login','API\V1\UserController@adminLogin');
     Route::get('workers','API\V1\UserController@getWorkers');
