@@ -298,6 +298,25 @@ class UserController extends Controller
             ]);
         }
     }
+    public function delWorker($id)
+    {
+        $apply = ApplyForm::find($id);
+        if (empty($apply)){
+            return response()->json([
+                'code'=>'404',
+                'msg'=>'Not Found'
+            ]);
+        }
+        $user = WeChatUser::find($apply->user_id);
+        $user->worker = 0;
+        $user->enable = 1;
+        $user->save();
+        if ($apply->delete()){
+            return response()->json([
+                'code'=>'200'
+            ]);
+        }
+    }
     public function getMyReserves()
     {
         $uid = getUserToken(Input::get('token'));
