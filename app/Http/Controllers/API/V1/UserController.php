@@ -279,6 +279,25 @@ class UserController extends Controller
                 ]);
             }
     }
+    public function modifyApply($id)
+    {
+        $apply = ApplyForm::find($id);
+        if (empty($apply)){
+            return response()->json([
+                'code'=>'404',
+                'msg'=>'Not Found'
+            ]);
+        }
+        $phone = Input::get('phone');
+        $name = Input::get('name');
+        $apply->phone = empty($phone)?$apply->phone:$phone;
+        $apply->name = empty($name)?$apply->name:$name;
+        if ($apply->save()){
+            return response()->json([
+                'code'=>'200'
+            ]);
+        }
+    }
     public function getMyReserves()
     {
         $uid = getUserToken(Input::get('token'));

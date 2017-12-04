@@ -23,6 +23,7 @@ Route::group(['middleware'=>'cross'],function (){
     Route::post('login','API\V1\UserController@adminLogin');
     Route::get('workers','API\V1\UserController@getWorkers');
     Route::get('modify/worker/{id}','API\V1\UserController@modifyWorker');
+    Route::post('modify/apply/{id}','API\V1\UserController@modifyApply');
     Route::any('upload','API\V1\SystemController@uploadImage');
     Route::group(['middleware'=>'auth'],function (){
 //   Route::post();
