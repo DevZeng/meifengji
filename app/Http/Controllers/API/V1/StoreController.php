@@ -122,9 +122,11 @@ class StoreController extends Controller
         $app_id = Input::get('app_id');
         $secret = Input::get('secret');
         $template_id = Input::get('template_id');
+        $name = Input::get('name');
         $app->app_id = empty($app_id)?$app->app_id:$app_id;
         $app->secret = empty($secret)?$app->secret:$secret;
         $app->template_id = empty($template_id)?$app->template_id:$template_id;
+        $app->name = empty($name)?$app->name:$name;
         if ($app->save()){
             return response()->json([
                 'code'=>'200'
