@@ -110,4 +110,25 @@ class StoreController extends Controller
             'code'=>'200'
         ]);
     }
+    public function modifyStoreApp($id)
+    {
+        $app = StoreApp::find($id);
+        if (empty($app)){
+            return response()->json([
+                'code'=>'404',
+                'msg'=>"Not Found"
+            ]);
+        }
+        $app_id = Input::get('app_id');
+        $secret = Input::get('secret');
+        $template_id = Input::get('template_id');
+        $app->app_id = empty($app_id)?$app->app_id:$app_id;
+        $app->secret = empty($secret)?$app->secret:$secret;
+        $app->template_id = empty($template_id)?$app->template_id:$template_id;
+        if ($app->save()){
+            return response()->json([
+                'code'=>'200'
+            ]);
+        }
+    }
 }

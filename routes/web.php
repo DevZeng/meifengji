@@ -60,6 +60,7 @@ Route::group(['middleware'=>'cross'],function (){
    Route::get('del/app/{id}','API\V1\UserController@delApp')->middleware('role:admin');
    Route::post('modify/password/{id}','API\V1\UserController@modifyPassword')->middleware('role:admin');
    Route::get('apps','API\V1\UserController@listApps')->middleware('role:admin');
+   Route::post('modify/app/{id}','API\V1\StoreController@modifyStoreApp')->middleware('role:admin');
    Route::get('output','API\V1\ExcelController@Output')->middleware('role:admin');
     });
 });
