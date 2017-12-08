@@ -55,7 +55,7 @@ Route::group(['middleware'=>'cross'],function (){
    Route::get('applies','API\V1\SystemController@listApply')->middleware('role:admin');
    Route::get('review/apply/{id}','API\V1\SystemController@reviewApply')->middleware('role:admin');
    Route::get('info','API\V1\StoreController@getInfo')->middleware('role:franchisee');
-   Route::post('info','API\V1\StoreController@addStoreInfo')->middleware('role:franchisee');
+   Route::post('info','API\V1\StoreController@addStoreInfo')->middleware('role:admin');
    Route::post('add/user','API\V1\UserController@addUser')->middleware('role:admin');
    Route::get('del/app/{id}','API\V1\UserController@delApp')->middleware('role:admin');
    Route::post('modify/password/{id}','API\V1\UserController@modifyPassword')->middleware('role:admin');
