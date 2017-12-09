@@ -29,7 +29,7 @@ Route::group(['middleware'=>'cross'],function (){
     Route::group(['middleware'=>'auth'],function (){
 //   Route::post();
    Route::get('reserves','API\V1\OrderController@getReserves')->middleware('role:admin');
-   Route::post('info','API\V1\CommodityController@addCommodityInfo')->middleware('role:admin');
+   Route::post('commodity/info','API\V1\CommodityController@addCommodityInfo')->middleware('role:admin');
    Route::get('infos','API\V1\CommodityController@listCommodityInfos')->middleware('role:admin');
    Route::get('del/info/{id}','API\V1\CommodityController@delCommodityInfo')->middleware('role:admin');
    Route::post('standards','API\V1\CommodityController@addStandards')->middleware('role:admin');
@@ -55,7 +55,7 @@ Route::group(['middleware'=>'cross'],function (){
    Route::get('applies','API\V1\SystemController@listApply')->middleware('role:admin');
    Route::get('review/apply/{id}','API\V1\SystemController@reviewApply')->middleware('role:admin');
    Route::get('info','API\V1\StoreController@getInfo')->middleware('role:franchisee');
-   Route::post('info','API\V1\StoreController@addStoreInfo')->middleware('role:admin');
+   Route::post('info','API\V1\StoreController@addStoreInfo')->middleware('role:franchisee');
    Route::post('add/user','API\V1\UserController@addUser')->middleware('role:admin');
    Route::get('del/app/{id}','API\V1\UserController@delApp')->middleware('role:admin');
    Route::post('modify/password/{id}','API\V1\UserController@modifyPassword')->middleware('role:admin');
