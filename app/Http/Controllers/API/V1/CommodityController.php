@@ -84,10 +84,10 @@ class CommodityController extends Controller
         $limit = $request->input('limit',10);
         $title = $request->input('title');
         if (!empty($title)){
-            $commodities = CommodityInfo::where('title','like','%'.$title.'%')->where('state','=',1)->get();
+            $commodities = CommodityInfo::where('title','like','%'.$title.'%')->where('state','=',1)->orderBy('id','DESC')->get();
             $count = CommodityInfo::where('title','like','%'.$title.'%')->where('state','=',1)->count();
         }else{
-            $commodities = CommodityInfo::where('state','=',1)->limit($limit)->offset(($page-1)*$limit)->get();
+            $commodities = CommodityInfo::where('state','=',1)->limit($limit)->offset(($page-1)*$limit)->orderBy('id','DESC')->get();
             $count = CommodityInfo::where('state','=',1)->limit($limit)->offset(($page-1)*$limit)->count();
         }
         if (!empty($commodities)){
