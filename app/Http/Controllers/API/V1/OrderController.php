@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers\API\V1;
 
+use App\Libraries\AliSms;
 use App\Libraries\AliyunSMS;
 use App\Libraries\WxNotify;
 use App\Libraries\WxPay;
@@ -52,8 +53,7 @@ class OrderController extends Controller
                     $reserves ->user_id = $applies[$i]->user_id;
                     $reserves ->reserve_id = $address->id;
                     $reserves->save();
-                    $sms = new AliyunSMS();
-                    $sms->send($applies[$i]->phone,config('alisms.company'),json_encode(['param'=>'1']),config('alisms.Notify'));
+                    AliSms::sendSms($applies[$i]->phone,config('alisms.Notify'),['param'=>'1']);
                 }
             }
             return response()->json([

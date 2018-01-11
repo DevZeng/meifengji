@@ -6,11 +6,11 @@
  * Time: 上午11:18
  */
 return [
-    'KEY' =>'24686003',
-    'SECRETKEY'=>'2a987b373fb7a3326fa7344949326032',
+    'KEY' =>'LTAIAUT3WpS1koSx',
+    'SECRETKEY'=>'BQRzbezz3RQcj4rro4fa4tcM82KWBG',
     'company'=>'美家美缝服务中心',
     'VerificationCode'=>'SMS_109420184',
-    'Notify'=>'SMS_109345194',
+    'Notify'=>'SMS_112555024',
     'Pass'=>'SMS_109565185',
     'Fail'=>'SMS_109555201'
 ];
