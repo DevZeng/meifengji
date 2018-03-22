@@ -9,8 +9,8 @@ return [
     'KEY' =>'LTAIAUT3WpS1koSx',
     'SECRETKEY'=>'BQRzbezz3RQcj4rro4fa4tcM82KWBG',
     'company'=>'美家美缝服务中心',
-    'VerificationCode'=>'SMS_109420184',
-    'Notify'=>'SMS_112555024',
-    'Pass'=>'SMS_109565185',
+    'VerificationCode'=>'SMS_127158169',
+    'Notify'=>'SMS_127158138',
+    'Pass'=>'SMS_127153212',
     'Fail'=>'SMS_109555201'
 ];
