@@ -181,14 +181,14 @@ class OrderController extends Controller
         $limit = Input::get('limit',10);
         $page = Input::get('page',1);
         if (!empty($number)){
-            $order = Order::where('number','=',$number)->get();
+            $order = Order::where('number','=',$number)->orderBy('id','DESC')->get();
             $count = Order::where('number','=',$number)->count();
         }else{
             if (!empty($state)){
-                $order = Order::where('state','=',$state)->limit($limit)->offset(($page-1)*$limit)->get();
+                $order = Order::where('state','=',$state)->limit($limit)->offset(($page-1)*$limit)->orderBy('id','DESC')->get();
                 $count = Order::where('state','=',$state)->limit($limit)->offset(($page-1)*$limit)->count();
             }else{
-                $order = Order::where('state','!=','0')->limit($limit)->offset(($page-1)*$limit)->get();
+                $order = Order::where('state','!=','0')->limit($limit)->offset(($page-1)*$limit)->orderBy('id','DESC')->get();
                 $count = Order::where('state','!=','0')->limit($limit)->offset(($page-1)*$limit)->count();
             }
         }
