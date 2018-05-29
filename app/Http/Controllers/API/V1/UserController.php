@@ -131,6 +131,56 @@ class UserController extends Controller
             'data'=>$wxxcx
         ]);
     }
+    public function WorkerLogin(Request $request)
+    {
+        $wxxcx = new Wxxcx(\config('wxxcx.app_id'),\config('wxxcx.app_secret'));
+        $sessionKey = $wxxcx->getSessionKey($request->get('code'));
+        if ($sessionKey) {
+            $userinfo = $wxxcx->decode($request->get('encryptedData'), $request->get('iv'));
+            $userinfo = json_decode($userinfo);
+            $user = WeChatUser::where('open_id','=',$userinfo->openId)->first();
+            if (empty($user)) {
+                $user = new WeChatUser();
+                $user->nickname = $userinfo->nickName;
+                $user->gender = $userinfo->gender;
+                $user->city = $userinfo->city;
+                $user->province = $userinfo->province;
+                $user->avatarUrl = $userinfo->avatarUrl;
+                $user->open_id = $userinfo->openId;
+                if ($user->save()){
+                    $token = createNoncestr(16);
+                    setUserToken($token,$user->id);
+                    return response()->json([
+                        'code'=>'200',
+                        'data'=>[
+                            'worker'=>$user->worker,
+                            'apply'=>0,
+                            'token'=>$token,
+                            'enable'=>$user->enable
+                        ]
+                    ]);
+                }
+            } else {
+                $token = createNoncestr(16);
+                setUserToken($token,$user->id);
+                $count = ApplyForm::where('user_id','=',$user->id)->where('state','=','1')->count();
+                return response()->json([
+                    'code'=>'200',
+                    'data'=>[
+                        'worker'=>$user->worker,
+                        'apply'=>$count,
+                        'token'=>$token,
+                        'enable'=>$user->enable
+                    ]
+                ]);
+            }
+        }
+        return response()->json([
+            'code'=>'400',
+            'msg'=>'error',
+            'data'=>$wxxcx
+        ]);
+    }
     public function getReserves()
     {
         $uid = getUserToken(Input::get('token'));
@@ -226,6 +276,7 @@ class UserController extends Controller
         $address = Input::get('address');
         $name = Input::get('name');
         $id_card = Input::get('id_card');
+        $href = Input::get('href');
         $city = Input::get('city');
         $sms = Input::get('sns');
         $code = getCode($phone);
@@ -265,6 +316,7 @@ class UserController extends Controller
             $apply->address = $address;
             $apply->name = $name;
             $apply->id_card = $id_card;
+            $apply->href = $href;
             $apply->city = $city;
 //            $apply->lat = $lat;
 //            $apply->lng = $lng;

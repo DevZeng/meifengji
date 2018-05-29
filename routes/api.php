@@ -14,7 +14,9 @@ use Illuminate\Http\Request;
 */
 
 Route::group(['prefix'=>'v1'],function (){
+    Route::post('upload','API\V1\SystemController@uploadImage');
     Route::post('login','API\V1\UserController@login');
+    Route::post('worker/login','API\V1\UserController@WorkerLogin');
     Route::post('store/login','API\V1\UserController@storeLogin');
     Route::get('store/info','API\V1\StoreController@getStoreInfo');
     Route::get('my/reserves','API\V1\UserController@getReserves');
