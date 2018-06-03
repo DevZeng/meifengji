@@ -533,4 +533,16 @@ class UserController extends Controller
             'data'=>$apps
         ]);
     }
+    public function share()
+    {
+        $uid = getUserToken(Input::get('token'));
+        $user = WeChatUser::find($uid);
+        $user->score += 30;
+        $user->save();
+        return response()->json([
+            'code'=>'200',
+            'msg'=>'分享成功！'
+        ]);
+
+    }
 }

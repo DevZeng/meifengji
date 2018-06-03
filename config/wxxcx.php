@@ -11,5 +11,7 @@ return [
     'mch_id'=>'1424053202',
     'notify_url'=>'https://xcx.gdmeika.com/api/v1/pay/notify',
     'api_key'=>'GongDuanMEIJIAKACOM4006020288888',
-    'template_id'=>'xDr8WW2-lNEt3bwzaIXc1R0Y0FzCTnQk1B5p4t9tQPc'
+    'template_id'=>'xDr8WW2-lNEt3bwzaIXc1R0Y0FzCTnQk1B5p4t9tQPc',
+    'appId'=>'wx711ed31e0a01135a',
+    'appSecret'=>'3e9b28f6578d9730a2bbfb9810e0ade7'
 ];
