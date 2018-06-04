@@ -16,6 +16,7 @@ use App\Models\Order;
 use App\Models\OrderSnapshot;
 use App\Models\Reserve;
 use App\Models\StoreApp;
+use App\Models\SysConfig;
 use App\Models\WeChatUser;
 use function GuzzleHttp\Psr7\uri_for;
 use Illuminate\Http\Request;
@@ -94,7 +95,9 @@ class OrderController extends Controller
     public function getWorkerReserves()
     {
         $city = Input::get('city');
-        $data = DeliveryAddress::where('worker_id','=',0)->where('city','=',$city)->get();
+        $page = Input::get('page',1);
+        $limit = Input::get('limit',10);
+        $data = DeliveryAddress::where('worker_id','=',0)->where('city','=',$city)->limit(10)->offset(($page-1)*$limit)->get();
         $count = DeliveryAddress::where('worker_id','=',0)->where('city','=',$city)->count();
         if (!empty($data)){
             foreach ($data as $datum){
@@ -406,6 +409,69 @@ class OrderController extends Controller
             'data'=>[
                 'count'=>$count
             ]
+        ]);
+    }
+    public function createReserve()
+    {
+        $uid = getUserToken(Input::get('token'));
+        $app_id = Input::get('app_id');
+        $address = new DeliveryAddress();
+        $address->user_id = $uid;
+        $address->name = Input::get('name');
+        $address->number = Input::get('number');
+        $address->address = Input::get('address');
+        $address->formId = Input::get('formId');
+        $address->state = 'created';
+        if ($app_id){
+            $app = StoreApp::where('app_id','=',$app_id)->first();
+            if (!empty($app)){
+                $address->app_id = $app->id;
+            }
+        }
+//        $address->latitude = Input::get('latitude');
+//        $address->longitude = Input::get('longitude');
+        $address->city = Input::get('city');
+        if ($address->save()){
+            $applies = ApplyForm::where('city','=',$address->city)->where('state','=',1)->get();
+            if(!empty($applies)){
+                for ($i=0;$i<count($applies);$i++){
+                    $reserves = new Reserve();
+                    $reserves ->user_id = $applies[$i]->user_id;
+                    $reserves ->reserve_id = $address->id;
+                    $reserves->save();
+                    AliSms::sendSms($applies[$i]->phone,config('alisms.Notify'),['param'=>'1']);
+                }
+            }
+            return response()->json([
+                'code'=>'200'
+            ]);
+        }
+    }
+    public function WorkerAcceptReserve()
+    {
+        $uid = getUserToken(Input::get('token'));
+        $config = SysConfig::first();
+        $user = WeChatUser::find($uid);
+        if ($user->score<$config->accept_score){
+            return response()->json([
+                'code'=>'403',
+                'msg'=>'积分不够！'
+            ]);
+        }
+        $reserve_id = Input::get('reserve_id');
+        $reserve = DeliveryAddress::find($reserve_id);
+        if ($reserve->worker_id!=0){
+            return response()->json([
+                'code'=>'400',
+                'msg'=>'已被接单的订单不能重复接！'
+            ]);
+        }
+        $reserve->worker_id = $uid;
+        $reserve->state = 'accepted';
+        $reserve->save();
+        return response()->json([
+            'code'=>'200',
+            'msg'=>'接单成功!'
         ]);
     }
 }
