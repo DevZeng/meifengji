@@ -98,7 +98,7 @@ class OrderController extends Controller
         $count = DeliveryAddress::where('worker_id','=',0)->where('city','=',$city)->count();
         if (!empty($data)){
             foreach ($data as $datum){
-                $datum->number = str_split($datum->number,6).'*****';
+                $datum->number = substr($datum->number,0,6).'*****';
             }
         }
         return response()->json([
