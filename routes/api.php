@@ -32,6 +32,7 @@ Route::group(['prefix'=>'v1'],function (){
     Route::get('accept/count','API\V1\OrderController@noAccept');
     Route::post('worker','API\V1\UserController@addWorker');
     Route::get('worker/reserves','API\V1\UserController@getMyReserves');
+    Route::get('reserves','API\V1\OrderController@getWorkerReserves');
     Route::get('accept/reserve/{id}','API\V1\OrderController@AcceptReserve');
     Route::get('article','API\V1\SystemController@getArticle');
     Route::post('code','API\V1\SystemController@sendCode');

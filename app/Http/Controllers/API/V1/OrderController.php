@@ -91,6 +91,22 @@ class OrderController extends Controller
             'data'=>$reserves
         ]);
     }
+    public function getWorkerReserves()
+    {
+        $city = Input::get('city');
+        $data = DeliveryAddress::where('worker_id','=',0)->where('city','=',$city)->get();
+        $count = DeliveryAddress::where('worker_id','=',0)->where('city','=',$city)->count();
+        if (!empty($data)){
+            foreach ($data as $datum){
+                $datum->number = str_split($datum->number,6).'*****';
+            }
+        }
+        return response()->json([
+            'code'=>'200',
+            'count'=>$count,
+            'data'=>$data
+        ]);
+    }
     public function finishReserve($id)
     {
         $uid = getUserToken(Input::get('token'));
