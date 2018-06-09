@@ -94,9 +94,11 @@ class OrderController extends Controller
     }
     public function getWorkerReserves()
     {
-        $city = Input::get('city');
+//        $city = Input::get('city');
         $page = Input::get('page',1);
         $limit = Input::get('limit',10);
+        $uid = getUserToken(Input::get('token'));
+        $city = ApplyForm::where('user_id','=',$uid)->where('state','=',1)->pluck('city')->first();
         $data = DeliveryAddress::where('worker_id','=',0)->where('city','=',$city)->limit(10)->offset(($page-1)*$limit)->get();
         $count = DeliveryAddress::where('worker_id','=',0)->where('city','=',$city)->count();
         if (!empty($data)){
@@ -474,4 +476,5 @@ class OrderController extends Controller
             'msg'=>'接单成功!'
         ]);
     }
+//    public function
 }

@@ -33,13 +33,13 @@ Route::group(['prefix'=>'v1'],function (){
     Route::post('worker','API\V1\UserController@addWorker');
     Route::get('worker/reserves','API\V1\UserController@getMyReserves');
     Route::get('reserves','API\V1\OrderController@getWorkerReserves');
-    Route::get('accept/reserve/{id}','API\V1\OrderController@AcceptReserve');
+//    Route::get('accept/reserve/{id}','API\V1\OrderController@AcceptReserve');
     Route::get('article','API\V1\SystemController@getArticle');
     Route::post('code','API\V1\SystemController@sendCode');
     Route::post('pay/notify','API\V1\OrderController@payNotify');
     Route::post('finish/reserve/{id}','API\V1\OrderController@finishReserve');
     Route::get('share','API\V1\UserController@share');
-    Route::get('accept','API\V1\OrderController@WorkerAcceptReserve');
+    Route::get('accept/reserve/{id}','API\V1\OrderController@WorkerAcceptReserve');
     Route::post('reserve','API\V1\OrderController@createReserve');
 });
 Route::group(['prefix'=>'v2'],function (){
