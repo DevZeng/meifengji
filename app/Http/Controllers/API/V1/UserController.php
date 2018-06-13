@@ -331,6 +331,20 @@ class UserController extends Controller
                 ]);
             }
     }
+    public function testUser(Request $post)
+    {
+        $username = $post->username;
+        $password = $post->password;
+        if (Auth::attempt(['username'=>$username,'password'=>$password],false)){
+            $token = createNoncestr(8);
+            setUserToken($token,Auth::id());
+            return response()->json([
+                'code'=>'200',
+                'data'=>['token'=>$token],
+            ]);
+        }
+        return "ERROR";
+    }
     public function modifyApply($id)
     {
         $apply = ApplyForm::find($id);
