@@ -565,4 +565,11 @@ class UserController extends Controller
         ]);
 
     }
+    public function getWorkerData()
+    {
+        $user_id = getUserToken(Input::get('token'));
+        return response()->json([
+            
+        ]);
+    }
 }
