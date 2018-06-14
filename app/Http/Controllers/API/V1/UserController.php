@@ -568,8 +568,15 @@ class UserController extends Controller
     public function getWorkerData()
     {
         $user_id = getUserToken(Input::get('token'));
+        $user = User::find($user_id);
         return response()->json([
-            
+            'code'=>'200',
+            'data'=>[
+                'amount'=>$user->amount,
+                'score'=>$user->score,
+                'cost'=>DeliveryAddress::where()->sum('price'),
+                'pay_cost'=>DeliveryAddress::where()->sum('pay_price')
+            ]
         ]);
     }
 }
