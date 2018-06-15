@@ -31,7 +31,7 @@ Route::group(['prefix'=>'v1'],function (){
     Route::get('confirm/{id}','API\V1\OrderController@confirm');
     Route::get('accept/count','API\V1\OrderController@noAccept');
     Route::post('worker','API\V1\UserController@addWorker');
-    Route::post('test/worker','API\V1\UserController@testUser');
+    Route::post('bind/worker','API\V1\UserController@bindUser');
     Route::get('worker/reserves','API\V1\UserController@getMyReserves');
     Route::get('worker/data','API\V1\UserController@getWorkerData');
     Route::get('reserves','API\V1\OrderController@getWorkerReserves');

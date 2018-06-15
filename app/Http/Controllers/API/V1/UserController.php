@@ -148,31 +148,47 @@ class UserController extends Controller
                 $user->avatarUrl = $userinfo->avatarUrl;
                 $user->open_id = $userinfo->openId;
                 if ($user->save()){
-                    $token = createNoncestr(16);
-                    setUserToken($token,$user->id);
+//                    $token = createNoncestr(16);
+//                    setUserToken($token,$user->id);
                     return response()->json([
                         'code'=>'200',
                         'data'=>[
-                            'worker'=>$user->worker,
-                            'apply'=>0,
-                            'token'=>$token,
-                            'enable'=>$user->enable
+                            'worker_id'=>0,
+                            'user_id'=>$user->id
                         ]
                     ]);
                 }
             } else {
-                $token = createNoncestr(16);
-                setUserToken($token,$user->id);
-                $count = ApplyForm::where('user_id','=',$user->id)->where('state','=','1')->count();
-                return response()->json([
-                    'code'=>'200',
-                    'data'=>[
-                        'worker'=>$user->worker,
-                        'apply'=>$count,
-                        'token'=>$token,
-                        'enable'=>$user->enable
-                    ]
-                ]);
+                if ($user->worker_id!=0){
+                    $token = createNoncestr(16);
+                    setUserToken($token,$user->worker_id);
+                    return response()->json([
+                        'code'=>'200',
+                        'data'=>[
+                            'token'=>$token,
+                            'worker_id'=>$user->worker_id
+                        ]
+                    ]);
+                }else{
+                    return response()->json([
+                        'code'=>'200',
+                        'data'=>[
+                            'user_id'=>$user->id,
+                            'worker_id'=>$user->worker_id
+                        ]
+                    ]);
+                }
+
+//                $count = ApplyForm::where('user_id','=',$user->id)->where('state','=','1')->count();
+//                return response()->json([
+//                    'code'=>'200',
+//                    'data'=>[
+//                        'worker'=>$user->worker,
+//                        'apply'=>$count,
+//                        'token'=>$token,
+//                        'enable'=>$user->enable
+//                    ]
+//                ]);
             }
         }
         return response()->json([
@@ -331,19 +347,26 @@ class UserController extends Controller
                 ]);
             }
     }
-    public function testUser(Request $post)
+    public function bindUser(Request $post)
     {
         $username = $post->username;
         $password = $post->password;
+        $user_id = $post->user_id;
         if (Auth::attempt(['username'=>$username,'password'=>$password],false)){
             $token = createNoncestr(8);
+            $user = WeChatUser::find($user_id);
+            $user->worker_id = Auth::id();
+            $user->save();
             setUserToken($token,Auth::id());
             return response()->json([
                 'code'=>'200',
                 'data'=>['token'=>$token],
             ]);
         }
-        return "ERROR";
+        return response()->json([
+            'code'=>'400',
+            'msg'=>'账号错误！',
+        ]);
     }
     public function modifyApply($id)
     {
