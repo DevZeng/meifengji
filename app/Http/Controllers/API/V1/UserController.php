@@ -133,7 +133,7 @@ class UserController extends Controller
     }
     public function WorkerLogin(Request $request)
     {
-        $wxxcx = new Wxxcx(\config('wxxcx.app_id'),\config('wxxcx.app_secret'));
+        $wxxcx = new Wxxcx(\config('wxxcx.appId'),\config('wxxcx.appSecret'));
         $sessionKey = $wxxcx->getSessionKey($request->get('code'));
         if ($sessionKey) {
             $userinfo = $wxxcx->decode($request->get('encryptedData'), $request->get('iv'));
