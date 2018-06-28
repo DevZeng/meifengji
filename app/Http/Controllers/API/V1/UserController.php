@@ -285,7 +285,7 @@ class UserController extends Controller
     }
     public function addWorker()
     {
-        $uid = getUserToken(Input::get('token'));
+        $uid = Input::get('user_id');
         $phone = Input::get('phone');
         $password = Input::get('password');
         $good_at = Input::get('good_at');
@@ -601,5 +601,30 @@ class UserController extends Controller
                 'pay_cost'=>DeliveryAddress::where()->sum('pay_price')
             ]
         ]);
+    }
+    public function changePassword()
+    {
+        $username = Input::get('phone');
+        $code = Input::get('code');
+        $password = Input::get('password');
+        if ($code!=getCode($username)){
+            return response()->json([
+                'code'=>'400',
+                'msg'=>'验证码错误！'
+            ]);
+        }
+        $user = User::where('username','=',$username)->first();
+        if (empty($user)){
+            return response()->json([
+                'code'=>'400',
+                'msg'=>'用户不存在！'
+            ]);
+        }
+        $user->password = bcrypt($password);
+        if ($user->save()){
+            return response()->json([
+                'code'=>'200'
+            ]);
+        }
     }
 }

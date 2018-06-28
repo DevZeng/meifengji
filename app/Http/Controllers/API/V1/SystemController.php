@@ -62,7 +62,7 @@ class SystemController extends Controller
     {
         if (!$request->hasFile('image')){
             return response()->json([
-                'return_code'=>'FAIL',
+                'code'=>'200',
                 'return_msg'=>'空文件'
             ]);
         }
@@ -72,14 +72,14 @@ class SystemController extends Controller
         $name = explode('.',$name);
         if (count($name)!=2){
             return response()->json([
-                'return_code'=>'FAIL',
+                'code'=>'200',
                 'return_msg'=>'非法文件名'
             ]);
         }
         $allow = \config('fileAllow');
         if (!in_array($name[1],$allow)){
             return response()->json([
-                'return_code'=>'FAIL',
+                'code'=>'400',
                 'return_msg'=>'不支持的文件格式'
             ]);
         }
@@ -88,7 +88,7 @@ class SystemController extends Controller
         $name = $md5.'.'.$name;
         if (!$file){
             return response()->json([
-                'return_code'=>'FAIL',
+                'code'=>'400',
                 'return_msg'=>'空文件'
             ]);
         }
@@ -99,7 +99,7 @@ class SystemController extends Controller
             $file->move($destinationPath,$name);
             $thumb->save($destinationPath.'/thumb_'.$name);
             return response()->json([
-                'return_code'=>'SUCCESS',
+                'code'=>'200',
                 'data'=>[
                     'file_name'=>$name,
                     'base_url'=>formatUrl($destinationPath.'/'.$name),
