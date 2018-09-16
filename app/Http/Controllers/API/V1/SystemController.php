@@ -7,6 +7,7 @@ use App\Libraries\AliyunSMS;
 use App\Models\Advert;
 use App\Models\ApplyForm;
 use App\Models\Article;
+use App\Models\SysConfig;
 use App\Models\WeChatUser;
 use Illuminate\Support\Facades\DB;
 use Intervention\Image\Facades\Image;
@@ -225,5 +226,33 @@ class SystemController extends Controller
                 'code'=>'200'
             ]);
         }
+    }
+    public function modifySysConfig(Request $post)
+    {
+        $config = SysConfig::first();
+        if (empty($config)){
+            $config = new SysConfig();
+        }
+        $config->accept_score = $post->accept_score?$post->accept_score:0;
+        $config->share_score = $post->share_score?$post->share_score:0;
+        $config->moment_score = $post->moment_score?$post->moment_score:0;
+        $config->ratio = $post->ratio?$post->ratio:0;
+        if ($config->save()){
+            return response()->json([
+                'code'=>'200'
+            ]);
+        }
+        return response()->json([
+            'code'=>'400',
+            'msg'=>'系统错误！'
+        ]);
+    }
+    public function getSysConfig()
+    {
+        $config = SysConfig::first();
+        return response()->json([
+        'code'=>'200',
+        'data'=>$config
+    ]);
     }
 }

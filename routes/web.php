@@ -62,5 +62,8 @@ Route::group(['middleware'=>'cross'],function (){
    Route::get('apps','API\V1\UserController@listApps')->middleware('role:admin');
    Route::post('modify/app/{id}','API\V1\StoreController@modifyStoreApp')->middleware('role:admin');
    Route::get('output','API\V1\ExcelController@Output')->middleware('role:admin');
+   Route::post('sys/config','API\V1\SystemController@modifySysConfig')->middleware('role:admin');
+   Route::get('sys/config','API\V1\SystemController@getSysConfig')->middleware('role:admin');
+   Route::post('user/score','API\V1\UserController@modifyScore')->middleware('role:admin');
     });
 });

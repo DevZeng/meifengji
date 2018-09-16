@@ -627,4 +627,19 @@ class UserController extends Controller
             ]);
         }
     }
+    public function modifyScore()
+    {
+        $id = Input::get('user_id');
+        $user = User::find($id);
+        $user->score = Input::get('score');
+        if ($user->save()){
+            return response()->json([
+                'code'=>'200'
+            ]);
+        }
+        return response()->json([
+            'code'=>'400',
+            'msg'=>'系统错误！'
+        ]);
+    }
 }
