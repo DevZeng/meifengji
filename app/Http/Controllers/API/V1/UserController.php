@@ -630,12 +630,12 @@ class UserController extends Controller
     public function modifyScore()
     {
         $id = Input::get('user_id');
-        $user = User::find($id);
-        $user->score = Input::get('score');
+        //$user = User::find($id);
+        //$user->score = Input::get('score');
         $wechatUser = WeChatUser::find($id);
         $wechatUser->score = nput::get('score');
-        if ($user->save()){
-            $wechatUser->save();
+        if ($wechatUser->save()){
+            //$wechatUser->save();
             return response()->json([
                 'code'=>'200'
             ]);
