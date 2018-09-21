@@ -633,7 +633,7 @@ class UserController extends Controller
         //$user = User::find($id);
         //$user->score = Input::get('score');
         $wechatUser = WeChatUser::find($id);
-        $wechatUser->score = nput::get('score');
+        $wechatUser->score = Input::get('score');
         if ($wechatUser->save()){
             //$wechatUser->save();
             return response()->json([
