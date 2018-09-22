@@ -22,7 +22,7 @@ Route::group(['prefix'=>'v1'],function (){
     Route::get('my/reserves','API\V1\UserController@getReserves');
     Route::get('my/orders','API\V1\UserController@getOrders');
     Route::get('my/car','API\V1\UserController@getCar');
-//    Route::post('reserve','API\V1\OrderController@reserve');
+    Route::post('reserve','API\V1\OrderController@reserve');
     Route::get('adverts','API\V1\SystemController@getAdverts');
     Route::get('commodities','API\V1\CommodityController@getCommodityInfos');
     Route::get('commodity/{id}','API\V1\CommodityController@getCommodityInfo');
@@ -43,7 +43,7 @@ Route::group(['prefix'=>'v1'],function (){
     Route::post('finish/reserve/{id}','API\V1\OrderController@finishReserve');
     Route::get('share','API\V1\UserController@share');
     //Route::get('accept/reserve/{id}','API\V1\OrderController@WorkerAcceptReserve');
-    Route::post('reserve','API\V1\OrderController@createReserve');
+//    Route::post('reserve','API\V1\OrderController@createReserve');
 
 });
 Route::group(['prefix'=>'v2'],function (){
