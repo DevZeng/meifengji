@@ -421,8 +421,6 @@ class UserController extends Controller
         if ($type ==1){
             $id = Reserve::where('user_id','=',$uid)->limit($limit)->offset(($page-1)*$limit)->pluck('reserve_id');
             $reserves = DeliveryAddress::whereIn('id',$id)->orderBy('id','DESC')->get();
-        }else{
-
         }
         return response()->json([
             'code'=>'200',
