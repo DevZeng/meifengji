@@ -285,7 +285,7 @@ class UserController extends Controller
     }
     public function addWorker()
     {
-        $uid = Input::get('user_id');
+        $uid = getUserToken(Input::get('token'));
         $phone = Input::get('phone');
         $password = Input::get('password');
         $good_at = Input::get('good_at');
