@@ -409,21 +409,21 @@ class UserController extends Controller
     public function getMyReserves()
     {
         $uid = getUserToken(Input::get('token'));
-//        $type = Input::get('type');
+        $type = Input::get('type');
         $page = Input::get('page',1);
         $limit = Input::get('limit',10);
-        $state = Input::get('state');
-        if ($state){
-            $reserves = DeliveryAddress::where('worker_id','=',$uid)->where('state','=',$state)->limit($limit)->offset(($page-1)*$limit)->orderBy('id','DESC')->get();
-        }else{
-            $reserves = DeliveryAddress::where('worker_id','=',$uid)->limit($limit)->offset(($page-1)*$limit)->orderBy('id','DESC')->get();
-        }
-//        if ($type ==1){
-//            $id = Reserve::where('user_id','=',$uid)->limit($limit)->offset(($page-1)*$limit)->pluck('reserve_id');
-//            $reserves = DeliveryAddress::whereIn('id',$id)->orderBy('id','DESC')->get();
+//        $state = Input::get('state');
+//        if ($state){
+//            $reserves = DeliveryAddress::where('worker_id','=',$uid)->where('state','=',$state)->limit($limit)->offset(($page-1)*$limit)->orderBy('id','DESC')->get();
 //        }else{
-
+//            $reserves = DeliveryAddress::where('worker_id','=',$uid)->limit($limit)->offset(($page-1)*$limit)->orderBy('id','DESC')->get();
 //        }
+        if ($type ==1){
+            $id = Reserve::where('user_id','=',$uid)->limit($limit)->offset(($page-1)*$limit)->pluck('reserve_id');
+            $reserves = DeliveryAddress::whereIn('id',$id)->orderBy('id','DESC')->get();
+        }else{
+
+        }
         return response()->json([
             'code'=>'200',
             'data'=>$reserves
